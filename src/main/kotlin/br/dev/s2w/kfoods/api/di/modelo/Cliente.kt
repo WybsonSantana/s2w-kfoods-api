@@ -1,4 +1,4 @@
-package br.dev.s2w.di.modelo
+package br.dev.s2w.kfoods.api.di.modelo
 
 data class Cliente(
     val nome: String,
