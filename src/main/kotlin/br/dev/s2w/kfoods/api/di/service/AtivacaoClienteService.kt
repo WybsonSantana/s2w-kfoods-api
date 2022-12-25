@@ -1,11 +1,18 @@
 package br.dev.s2w.kfoods.api.di.service
 
 import br.dev.s2w.kfoods.api.di.modelo.Cliente
-import br.dev.s2w.kfoods.api.di.notificacao.NotificadorEmail
+import br.dev.s2w.kfoods.api.di.notificacao.Notificador
 import org.springframework.stereotype.Component
 
 @Component
-data class AtivacaoClienteService(val notificador: NotificadorEmail) {
+class AtivacaoClienteService(notificador: Notificador) {
+
+    private val notificador: Notificador
+
+    init {
+        this.notificador = notificador
+        println("AtivacaoClienteService: $notificador")
+    }
 
     fun ativar(cliente: Cliente) {
         cliente.ativar()
