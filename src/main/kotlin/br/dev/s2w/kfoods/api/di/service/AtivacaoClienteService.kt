@@ -2,20 +2,31 @@ package br.dev.s2w.kfoods.api.di.service
 
 import br.dev.s2w.kfoods.api.di.modelo.Cliente
 import br.dev.s2w.kfoods.api.di.notificacao.Notificador
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-class AtivacaoClienteService(notificador: Notificador) {
+@Component
+class AtivacaoClienteService {
 
-    private val notificador: Notificador
+    @Autowired
+    private var notificador: Notificador? = null
 
-    init {
-        this.notificador = notificador
-        println("AtivacaoClienteService: $notificador")
-    }
+//    @Autowired
+//    constructor(notificador: Notificador?) {
+//        this.notificador = notificador
+//    }
+
+//    constructor(qualquer: String?) {
+//        TODO
+//    }
 
     fun ativar(cliente: Cliente) {
         cliente.ativar()
-        notificador.notificar(cliente, "Seu cadastro no sistema agora está ativo!")
+        notificador!!.notificar(cliente, "Seu cadastro no sistema agora está ativo!")
     }
 
+//    @Autowired
+//    fun setNotificador(notificador: Notificador?) {
+//        this.notificador = notificador
+//    }
 }
