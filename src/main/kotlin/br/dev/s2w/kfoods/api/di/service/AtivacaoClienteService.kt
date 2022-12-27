@@ -4,7 +4,6 @@ import br.dev.s2w.kfoods.api.di.modelo.Cliente
 import br.dev.s2w.kfoods.api.di.notificacao.Notificador
 import org.springframework.stereotype.Component
 
-@Component
 class AtivacaoClienteService(notificador: Notificador) {
 
     private val notificador: Notificador
