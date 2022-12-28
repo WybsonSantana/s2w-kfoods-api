@@ -8,25 +8,17 @@ import org.springframework.stereotype.Component
 @Component
 class AtivacaoClienteService {
 
-    @Autowired
+    @Autowired(required = false)
     private var notificador: Notificador? = null
-
-//    @Autowired
-//    constructor(notificador: Notificador?) {
-//        this.notificador = notificador
-//    }
-
-//    constructor(qualquer: String?) {
-//        TODO
-//    }
 
     fun ativar(cliente: Cliente) {
         cliente.ativar()
-        notificador!!.notificar(cliente, "Seu cadastro no sistema agora está ativo!")
+
+        if (notificador != null) {
+            notificador!!.notificar(cliente, "Seu cadastro no sistema agora está ativo!")
+        } else {
+            println("O cliente ${cliente.nome} foi ativado no sistema, mas não foi notificado devido a falta de um serviço de notificação.")
+        }
     }
 
-//    @Autowired
-//    fun setNotificador(notificador: Notificador?) {
-//        this.notificador = notificador
-//    }
 }
