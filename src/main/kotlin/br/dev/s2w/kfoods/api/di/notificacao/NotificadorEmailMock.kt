@@ -4,16 +4,16 @@ import br.dev.s2w.kfoods.api.di.modelo.Cliente
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
-@Profile("prod")
-@TipoDoNotificador(value = NivelUrgencia.SEM_URGENCIA)
+@Profile("dev")
+@TipoDoNotificador(NivelUrgencia.SEM_URGENCIA)
 @Component
-class NotificadorEmail : Notificador {
+class NotificadorEmailMock : Notificador {
 
     init {
-        println("NotificadorEmail")
+        println("NotificadorEmailMock")
     }
 
     override fun notificar(cliente: Cliente, mensagem: String) {
-        println("Notificando ${cliente.nome} através do email ${cliente.email}: $mensagem")
+        println("Deveria notificar ${cliente.nome} através do email ${cliente.email}: $mensagem")
     }
 }
