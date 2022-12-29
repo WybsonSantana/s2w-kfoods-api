@@ -1,17 +1,18 @@
 package br.dev.s2w.kfoods.api.di.service
 
 import br.dev.s2w.kfoods.api.di.modelo.Cliente
+import br.dev.s2w.kfoods.api.di.notificacao.NivelUrgencia
 import br.dev.s2w.kfoods.api.di.notificacao.Notificador
+import br.dev.s2w.kfoods.api.di.notificacao.TipoDoNotificador
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 
 @Component
 class AtivacaoClienteService {
 
-    @Qualifier("urgente")
+    @field:TipoDoNotificador(value = NivelUrgencia.URGENTE)
     @Autowired
-    private var notificador: Notificador? = null
+    private val notificador: Notificador? = null
 
     fun ativar(cliente: Cliente) {
         cliente.ativar()
