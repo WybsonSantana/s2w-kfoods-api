@@ -6,8 +6,10 @@ import br.dev.s2w.kfoods.api.di.notificacao.Notificador
 import br.dev.s2w.kfoods.api.di.notificacao.TipoDoNotificador
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import javax.annotation.PostConstruct
+import javax.annotation.PreDestroy
 
-@Component
+//@Component
 class AtivacaoClienteService {
 
     @field:TipoDoNotificador(value = NivelUrgencia.URGENTE)
@@ -19,5 +21,11 @@ class AtivacaoClienteService {
 
         notificador!!.notificar(cliente, "Seu cadastro no sistema agora está ativo!")
     }
+
+    //@PostConstruct
+    fun init() = println("init() $notificador")
+
+    //@PreDestroy
+    fun destroy() = println("destroy() $notificador")
 
 }
