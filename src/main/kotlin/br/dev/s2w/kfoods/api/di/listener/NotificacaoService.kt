@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 @Component
 class NotificacaoService {
 
-    @field:TipoDoNotificador(value = NivelUrgencia.URGENTE)
+    @field:TipoDoNotificador(value = NivelUrgencia.SEM_URGENCIA)
     @Autowired
     private val notificador: Notificador? = null
 
