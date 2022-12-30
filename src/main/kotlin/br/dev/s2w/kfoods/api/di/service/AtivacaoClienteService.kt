@@ -1,31 +1,17 @@
 package br.dev.s2w.kfoods.api.di.service
 
+import br.dev.s2w.kfoods.api.di.event.ClienteAtivadoEvent
 import br.dev.s2w.kfoods.api.di.modelo.Cliente
-import br.dev.s2w.kfoods.api.di.notificacao.NivelUrgencia
-import br.dev.s2w.kfoods.api.di.notificacao.Notificador
-import br.dev.s2w.kfoods.api.di.notificacao.TipoDoNotificador
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
-import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
 
-//@Component
-class AtivacaoClienteService {
-
-    @field:TipoDoNotificador(value = NivelUrgencia.URGENTE)
-    @Autowired
-    private val notificador: Notificador? = null
+@Component
+class AtivacaoClienteService(private val publisherEvent: ApplicationEventPublisher) {
 
     fun ativar(cliente: Cliente) {
         cliente.ativar()
 
-        notificador!!.notificar(cliente, "Seu cadastro no sistema agora está ativo!")
+        publisherEvent.publishEvent(ClienteAtivadoEvent(cliente))
     }
-
-    //@PostConstruct
-    fun init() = println("init() $notificador")
-
-    //@PreDestroy
-    fun destroy() = println("destroy() $notificador")
 
 }
