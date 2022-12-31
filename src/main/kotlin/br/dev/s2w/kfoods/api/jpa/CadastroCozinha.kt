@@ -20,8 +20,13 @@ class CadastroCozinha(
         return manager.merge(cozinha)
     }
 
-    fun buscar(id: Long): Cozinha {
+    fun buscar(id: Long?): Cozinha {
         return manager.find(Cozinha::class.java, id)
+    }
+
+    @Transactional
+    fun remover(cozinha: Cozinha) {
+        manager.remove(buscar(cozinha.id))
     }
 
 }
