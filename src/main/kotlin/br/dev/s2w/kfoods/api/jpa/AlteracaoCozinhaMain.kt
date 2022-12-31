@@ -13,13 +13,8 @@ fun main(args: Array<String>) {
 
     val cadastroCozinha: CadastroCozinha = applicationContext.getBean(CadastroCozinha::class.java)
 
-    val cozinha1 = Cozinha(nome = "Brasileira")
-    val cozinha2 = Cozinha(nome = "Japonesa")
+    val cozinha = Cozinha(id = 1L, nome = "Brasileira")
 
-    cadastroCozinha.salvar(cozinha1)
-    cadastroCozinha.salvar(cozinha2)
-
-    println("${cozinha1.id} - ${cozinha1.nome}")
-    println("${cozinha2.id} - ${cozinha2.nome}")
+    cadastroCozinha.salvar(cozinha)
 
 }

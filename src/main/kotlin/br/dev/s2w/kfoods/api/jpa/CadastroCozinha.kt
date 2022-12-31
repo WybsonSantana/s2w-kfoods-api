@@ -16,7 +16,7 @@ class CadastroCozinha(
     }
 
     @Transactional
-    fun adicionar(cozinha: Cozinha): Cozinha {
+    fun salvar(cozinha: Cozinha): Cozinha {
         return manager.merge(cozinha)
     }
 
