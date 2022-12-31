@@ -20,4 +20,8 @@ class CadastroCozinha(
         return manager.merge(cozinha)
     }
 
+    fun buscar(id: Long): Cozinha {
+        return manager.find(Cozinha::class.java, id)
+    }
+
 }
