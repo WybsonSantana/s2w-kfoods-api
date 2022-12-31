@@ -2,6 +2,7 @@ package br.dev.s2w.kfoods.api.jpa
 
 import br.dev.s2w.kfoods.api.domain.model.Cozinha
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
@@ -12,6 +13,11 @@ class CadastroCozinha(
 
     fun listar(): List<Cozinha> {
         return manager.createQuery("from Cozinha", Cozinha::class.java).resultList
+    }
+
+    @Transactional
+    fun adicionar(cozinha: Cozinha): Cozinha {
+        return manager.merge(cozinha)
     }
 
 }

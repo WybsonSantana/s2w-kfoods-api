@@ -6,7 +6,7 @@ import javax.persistence.*
 data class Cozinha(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
     val nome: String
 )
