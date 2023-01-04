@@ -15,6 +15,7 @@ data class Restaurante(
     val taxaFrete: BigDecimal? = null,
 
     @ManyToOne
+    @JoinColumn(name = "cozinha_id")
     val cozinha: Cozinha? = null
 
 )
