@@ -1,4 +1,6 @@
-INSERT INTO cozinha(nome) VALUES('Tailandesa');
-INSERT INTO cozinha(nome) VALUES('Indiana');
-INSERT INTO restaurante(nome, taxa_frete) VALUES('kFoods!', 19);
-INSERT INTO restaurante(nome, taxa_frete) VALUES('KT Delivery', 17);
+INSERT INTO cozinha(id, nome) VALUES(1, 'Tailandesa');
+INSERT INTO cozinha(id, nome) VALUES(2, 'Indiana');
+
+INSERT INTO restaurante(nome, taxa_frete, cozinha_id) VALUES('kFoods!', 19, 1);
+INSERT INTO restaurante(nome, taxa_frete, cozinha_id) VALUES('KT Delivery', 17, 1);
+INSERT INTO restaurante(nome, taxa_frete, cozinha_id) VALUES('KotlinNuts', 17, 2);

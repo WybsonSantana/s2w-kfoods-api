@@ -12,6 +12,9 @@ data class Restaurante(
     val nome: String? = null,
 
     @Column(name = "taxa_frete")
-    val taxaFrete: BigDecimal? = null
+    val taxaFrete: BigDecimal? = null,
+
+    @ManyToOne
+    val cozinha: Cozinha? = null
 
 )
