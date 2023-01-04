@@ -7,11 +7,11 @@ import javax.persistence.*
 data class Restaurante(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
-    val nome: String,
+    val nome: String? = null,
 
     @Column(name = "taxa_frete")
-    val taxaFrete: BigDecimal
+    val taxaFrete: BigDecimal? = null
 
 )

@@ -1,8 +1,8 @@
 package br.dev.s2w.kfoods.api.jpa
 
 import br.dev.s2w.kfoods.api.S2wKfoodsApiApplication
-import br.dev.s2w.kfoods.api.domain.model.Cozinha
-import br.dev.s2w.kfoods.api.domain.repository.CozinhaRepository
+import br.dev.s2w.kfoods.api.domain.model.Restaurante
+import br.dev.s2w.kfoods.api.domain.repository.RestauranteRepository
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.ApplicationContext
@@ -12,10 +12,10 @@ fun main(args: Array<String>) {
         .web(WebApplicationType.NONE)
         .run(*args)
 
-    val cozinhaRepository: CozinhaRepository = applicationContext.getBean(CozinhaRepository::class.java)
+    val restauranteRepository: RestauranteRepository = applicationContext.getBean(RestauranteRepository::class.java)
 
-    val cozinha = Cozinha(id = 1L)
+    val restaurante: Restaurante = restauranteRepository.buscar(1L)
 
-    cozinhaRepository.remover(cozinha)
+    println(restaurante.nome)
 
 }
