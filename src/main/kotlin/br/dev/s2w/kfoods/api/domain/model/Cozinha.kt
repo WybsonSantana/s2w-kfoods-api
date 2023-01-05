@@ -8,5 +8,6 @@ data class Cozinha(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    val nome: String? = null
+    @Column(nullable = false)
+    val nome: String
 )

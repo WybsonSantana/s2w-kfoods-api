@@ -6,6 +6,7 @@ import br.dev.s2w.kfoods.api.domain.repository.RestauranteRepository
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.context.ApplicationContext
+import java.math.BigDecimal
 
 fun main(args: Array<String>) {
     val applicationContext: ApplicationContext = SpringApplicationBuilder(S2wKfoodsApiApplication::class.java)
@@ -14,7 +15,11 @@ fun main(args: Array<String>) {
 
     val restauranteRepository: RestauranteRepository = applicationContext.getBean(RestauranteRepository::class.java)
 
-    val restaurante = Restaurante(id = 1L)
+    val restaurante = Restaurante(
+        id = 1L,
+        "kFoods!",
+        taxaFrete = BigDecimal.valueOf(19)
+    )
 
     restauranteRepository.remover(restaurante)
 

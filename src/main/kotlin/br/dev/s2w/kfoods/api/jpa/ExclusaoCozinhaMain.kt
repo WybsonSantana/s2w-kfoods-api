@@ -14,8 +14,8 @@ fun main(args: Array<String>) {
 
     val cozinhaRepository: CozinhaRepository = applicationContext.getBean(CozinhaRepository::class.java)
 
-    val cozinha = Cozinha(id = 1L)
+    val cozinha = Cozinha(id = 1L, nome = "Tailandesa")
 
-    cozinhaRepository.remover(cozinha)
+    //cozinhaRepository.remover(cozinha)
 
 }

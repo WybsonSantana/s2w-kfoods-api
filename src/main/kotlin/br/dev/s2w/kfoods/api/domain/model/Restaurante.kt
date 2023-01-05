@@ -9,10 +9,11 @@ data class Restaurante(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    val nome: String? = null,
+    @Column(nullable = false)
+    val nome: String,
 
-    @Column(name = "taxa_frete")
-    val taxaFrete: BigDecimal? = null,
+    @Column(name = "taxa_frete", nullable = false)
+    val taxaFrete: BigDecimal,
 
     @ManyToOne
     @JoinColumn(name = "cozinha_id")
