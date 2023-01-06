@@ -3,7 +3,7 @@ package br.dev.s2w.kfoods.api.domain.model
 import javax.persistence.*
 
 @Entity
-data class Cozinha(
+data class Estado(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,

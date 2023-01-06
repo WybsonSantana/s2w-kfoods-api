@@ -7,7 +7,7 @@ import javax.persistence.*
 data class Restaurante(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: Long,
 
     @Column(nullable = false)
     val nome: String,
@@ -16,7 +16,7 @@ data class Restaurante(
     val taxaFrete: BigDecimal,
 
     @ManyToOne
-    @JoinColumn(name = "cozinha_id")
-    val cozinha: Cozinha? = null
+    @JoinColumn(name = "cozinha_id", nullable = false)
+    val cozinha: Cozinha
 
 )

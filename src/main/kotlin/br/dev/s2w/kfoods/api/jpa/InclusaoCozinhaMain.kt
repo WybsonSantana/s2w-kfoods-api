@@ -14,8 +14,8 @@ fun main(args: Array<String>) {
 
     val cozinhaRepository: CozinhaRepository = applicationContext.getBean(CozinhaRepository::class.java)
 
-    val cozinha1 = Cozinha(nome = "Brasileira")
-    val cozinha2 = Cozinha(nome = "Japonesa")
+    val cozinha1 = Cozinha(id = 1L, nome = "Brasileira")
+    val cozinha2 = Cozinha(id = 2L, nome = "Japonesa")
 
     cozinhaRepository.salvar(cozinha1)
     cozinhaRepository.salvar(cozinha2)

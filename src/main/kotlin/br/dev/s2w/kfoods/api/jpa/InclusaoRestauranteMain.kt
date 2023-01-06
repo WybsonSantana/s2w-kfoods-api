@@ -1,6 +1,7 @@
 package br.dev.s2w.kfoods.api.jpa
 
 import br.dev.s2w.kfoods.api.S2wKfoodsApiApplication
+import br.dev.s2w.kfoods.api.domain.model.Cozinha
 import br.dev.s2w.kfoods.api.domain.model.Restaurante
 import br.dev.s2w.kfoods.api.domain.repository.RestauranteRepository
 import org.springframework.boot.WebApplicationType
@@ -15,8 +16,25 @@ fun main(args: Array<String>) {
 
     val restauranteRepository: RestauranteRepository = applicationContext.getBean(RestauranteRepository::class.java)
 
-    val restaurante1 = Restaurante(nome = "Atomic Foods", taxaFrete = BigDecimal.valueOf(17))
-    val restaurante2 = Restaurante(nome = "KotlinNuts", taxaFrete = BigDecimal.valueOf(11))
+    val restaurante1 = Restaurante(
+        id = 1L,
+        nome = "Atomic Foods",
+        taxaFrete = BigDecimal.valueOf(17),
+        Cozinha(
+            id = 1L,
+            nome = "Tailandesa"
+        )
+    )
+
+    val restaurante2 = Restaurante(
+        id = 2L,
+        nome = "KotlinNuts",
+        taxaFrete = BigDecimal.valueOf(11),
+        Cozinha(
+            id = 1L,
+            nome = "Tailandesa"
+        )
+    )
 
     restauranteRepository.salvar(restaurante1)
     restauranteRepository.salvar(restaurante2)
