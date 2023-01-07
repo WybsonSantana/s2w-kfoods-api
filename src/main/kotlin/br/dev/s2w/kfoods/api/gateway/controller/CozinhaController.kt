@@ -2,6 +2,8 @@ package br.dev.s2w.kfoods.api.gateway.controller
 
 import br.dev.s2w.kfoods.api.domain.model.Cozinha
 import br.dev.s2w.kfoods.api.domain.repository.CozinhaRepository
+import br.dev.s2w.kfoods.api.gateway.model.CozinhasXmlWrapper
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -14,8 +16,13 @@ class CozinhaController(
 ) {
 
     @GetMapping
-    fun listar(): List<Cozinha> {
+    fun listarJson(): List<Cozinha> {
         return cozinhaRepository.listar()
+    }
+
+    @GetMapping(produces = [MediaType.APPLICATION_XML_VALUE])
+    fun listarXml(): CozinhasXmlWrapper {
+        return CozinhasXmlWrapper(cozinhaRepository.listar())
     }
 
     @GetMapping("/{cozinhaId}")

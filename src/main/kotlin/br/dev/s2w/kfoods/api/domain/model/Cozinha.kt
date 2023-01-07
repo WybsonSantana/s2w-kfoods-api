@@ -5,15 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonRootName
 import javax.persistence.*
 
-@JsonRootName("Gastronomia")
+@JsonRootName("cozinha")
 @Entity
 data class Cozinha(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    //@JsonIgnore
-    @JsonProperty("titulo")
     @Column(nullable = false)
     val nome: String
 )
