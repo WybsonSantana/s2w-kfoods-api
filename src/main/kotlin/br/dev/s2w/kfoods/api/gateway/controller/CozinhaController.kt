@@ -3,7 +3,6 @@ package br.dev.s2w.kfoods.api.gateway.controller
 import br.dev.s2w.kfoods.api.domain.model.Cozinha
 import br.dev.s2w.kfoods.api.domain.repository.CozinhaRepository
 import br.dev.s2w.kfoods.api.gateway.model.CozinhasXmlWrapper
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -30,24 +29,14 @@ class CozinhaController(
 
     @GetMapping("/{cozinhaId}")
     fun buscar(@PathVariable cozinhaId: Long): ResponseEntity<Cozinha> {
-        val cozinha: Cozinha = cozinhaRepository.buscar(cozinhaId)
+        val cozinha: Cozinha? = cozinhaRepository.buscar(cozinhaId)
 
-        //return ResponseEntity.status(HttpStatus.OK).body(cozinha)
-        //return ResponseEntity.ok(cozinha)
-        //return ResponseEntity.ok().build()
-
-
-        //return ResponseEntity.status(HttpStatus.OK).body(cozinha);
-        //return ResponseEntity.ok(cozinha);
-        //return ResponseEntity.ok().build();
-
-        val headers = HttpHeaders()
-        headers.add(HttpHeaders.LOCATION, "http://localhost:8080/cozinhas")
-
-        return ResponseEntity
-            .status(HttpStatus.FOUND)
-            .headers(headers)
-            .build()
+        return if (cozinha != null) {
+            ResponseEntity.status(HttpStatus.OK).body(cozinha)
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+            //ResponseEntity.notFound().build()
+        }
     }
 
 }

@@ -14,8 +14,8 @@ fun main(args: Array<String>) {
 
     val cozinhaRepository: CozinhaRepository = applicationContext.getBean(CozinhaRepository::class.java)
 
-    val cozinha: Cozinha = cozinhaRepository.buscar(1L)
+    val cozinha: Cozinha? = cozinhaRepository.buscar(1L)
 
-    println(cozinha.nome)
+    println(cozinha?.nome)
 
 }

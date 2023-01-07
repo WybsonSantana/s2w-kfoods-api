@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
     val restaurantes: List<Restaurante> = restauranteRepository.listar()
 
     for (restaurante in restaurantes) {
-        println("${restaurante.nome} - ${restaurante.taxaFrete} - ${restaurante.cozinha?.nome}")
+    println("${restaurante.nome} - ${restaurante.taxaFrete} - ${restaurante.cozinha.nome}")
     }
 
 
