@@ -3,10 +3,12 @@ package br.dev.s2w.kfoods.api.gateway.controller
 import br.dev.s2w.kfoods.api.domain.model.Cozinha
 import br.dev.s2w.kfoods.api.domain.repository.CozinhaRepository
 import br.dev.s2w.kfoods.api.gateway.model.CozinhasXmlWrapper
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -25,6 +27,7 @@ class CozinhaController(
         return CozinhasXmlWrapper(cozinhaRepository.listar())
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{cozinhaId}")
     fun buscar(@PathVariable cozinhaId: Long): Cozinha {
         return cozinhaRepository.buscar(cozinhaId)
