@@ -2,6 +2,7 @@ package br.dev.s2w.kfoods.api.gateway.controller
 
 import br.dev.s2w.kfoods.api.domain.model.Cozinha
 import br.dev.s2w.kfoods.api.domain.repository.CozinhaRepository
+import br.dev.s2w.kfoods.api.domain.service.CadastroCozinhaService
 import br.dev.s2w.kfoods.api.gateway.model.CozinhasXmlWrapper
 import org.springframework.beans.BeanUtils
 import org.springframework.dao.DataIntegrityViolationException
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/cozinhas")
 class CozinhaController(
-    private val cozinhaRepository: CozinhaRepository
+    private val cozinhaRepository: CozinhaRepository,
+    private val cadastroCozinha: CadastroCozinhaService
 ) {
 
     @GetMapping
@@ -40,7 +42,7 @@ class CozinhaController(
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     fun adicionar(@RequestBody cozinha: Cozinha): Cozinha {
-        return cozinhaRepository.salvar(cozinha)
+        return cadastroCozinha.salvar(cozinha)
     }
 
     @PutMapping("/{cozinhaId}")
