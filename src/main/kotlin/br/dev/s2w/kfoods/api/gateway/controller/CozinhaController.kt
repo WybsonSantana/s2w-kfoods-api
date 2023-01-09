@@ -5,12 +5,12 @@ import br.dev.s2w.kfoods.api.domain.exception.EntidadeNaoEncontradaException
 import br.dev.s2w.kfoods.api.domain.model.Cozinha
 import br.dev.s2w.kfoods.api.domain.repository.CozinhaRepository
 import br.dev.s2w.kfoods.api.domain.service.CadastroCozinhaService
-import br.dev.s2w.kfoods.api.gateway.model.CozinhasXmlWrapper
 import org.springframework.beans.BeanUtils
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.persistence.PersistenceException
 
 @RestController
 @RequestMapping("/cozinhas")
@@ -20,41 +20,44 @@ class CozinhaController(
 ) {
 
     @GetMapping
-    fun listarJson(): List<Cozinha> {
+    fun listar(): List<Cozinha> {
         return cozinhaRepository.listar()
-    }
-
-    @GetMapping(produces = [MediaType.APPLICATION_XML_VALUE])
-    fun listarXml(): CozinhasXmlWrapper {
-        return CozinhasXmlWrapper(cozinhaRepository.listar())
     }
 
     @GetMapping("/{cozinhaId}")
     fun buscar(@PathVariable cozinhaId: Long): ResponseEntity<Cozinha> {
-        val cozinha: Cozinha? = cozinhaRepository.buscar(cozinhaId)
+        val cozinha = cozinhaRepository.buscar(cozinhaId) ?: return ResponseEntity.notFound().build()
 
-        return if (cozinha != null) {
-            ResponseEntity.status(HttpStatus.OK).body(cozinha)
-        } else {
-            ResponseEntity.notFound().build()
-        }
+        return ResponseEntity.ok(cozinha)
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun adicionar(@RequestBody cozinha: Cozinha): Cozinha {
-        return cadastroCozinha.salvar(cozinha)
+    fun adicionar(@RequestBody cozinha: Cozinha): ResponseEntity<Cozinha> {
+        try {
+            if (cozinha.nome != "") {
+                return ResponseEntity.status(HttpStatus.CREATED).body(cadastroCozinha.salvar(cozinha))
+            }
+
+            return ResponseEntity.badRequest().build()
+        } catch (ex: PersistenceException) {
+            return ResponseEntity.badRequest().build()
+        }
     }
 
     @PutMapping("/{cozinhaId}")
     fun atualizar(@PathVariable cozinhaId: Long, @RequestBody cozinha: Cozinha): ResponseEntity<Cozinha> {
-        val cozinhaAtual = cozinhaRepository.buscar(cozinhaId)
+        return try {
+            val cozinhaAtual = cozinhaRepository.buscar(cozinhaId) ?: return ResponseEntity.notFound().build()
 
-        return if (cozinhaAtual != null) {
-            BeanUtils.copyProperties(cozinha, cozinhaAtual, "id")
-            ResponseEntity.ok(cozinhaRepository.salvar(cozinhaAtual))
-        } else {
-            ResponseEntity.notFound().build()
+            if (cozinha.nome != "") {
+                BeanUtils.copyProperties(cozinha, cozinhaAtual, "id")
+
+                return ResponseEntity.ok(cadastroCozinha.salvar(cozinhaAtual))
+            }
+
+            ResponseEntity.badRequest().build()
+        } catch (ex: DataIntegrityViolationException) {
+            ResponseEntity.badRequest().build()
         }
     }
 
