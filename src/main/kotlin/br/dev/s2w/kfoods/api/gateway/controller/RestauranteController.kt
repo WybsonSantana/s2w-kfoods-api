@@ -4,6 +4,7 @@ import br.dev.s2w.kfoods.api.domain.exception.EntidadeNaoEncontradaException
 import br.dev.s2w.kfoods.api.domain.model.Restaurante
 import br.dev.s2w.kfoods.api.domain.repository.RestauranteRepository
 import br.dev.s2w.kfoods.api.domain.service.CadastroRestauranteService
+import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -33,6 +34,23 @@ class RestauranteController(
             ResponseEntity.status(HttpStatus.CREATED).body(cadastroRestaurante.salvar(restaurante))
         } catch (ex: EntidadeNaoEncontradaException) {
             ResponseEntity.badRequest().body(ex.message)
+        }
+    }
+
+    @PutMapping("/{restauranteId}")
+    fun atualizar(
+        @PathVariable restauranteId: Long,
+        @RequestBody restaurante: Restaurante
+    ): ResponseEntity<Any> {
+        try {
+            val restauranteAtual = restauranteRepository.buscar(restauranteId)
+                ?: return ResponseEntity.notFound().build()
+println(restaurante.nome)
+            println(restaurante.taxaFrete)
+            BeanUtils.copyProperties(restaurante, restauranteAtual, "id")
+            return ResponseEntity.ok(cadastroRestaurante.salvar(restauranteAtual))
+        } catch (ex: EntidadeNaoEncontradaException) {
+            return ResponseEntity.badRequest().body(ex.message)
         }
     }
 

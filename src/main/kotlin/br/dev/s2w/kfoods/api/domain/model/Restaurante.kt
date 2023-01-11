@@ -13,7 +13,7 @@ data class Restaurante(
     var nome: String = "",
 
     @Column(name = "taxa_frete", nullable = false)
-    var taxaFrete: BigDecimal = BigDecimal.valueOf(0),
+    var taxaFrete: BigDecimal = BigDecimal.ZERO,
 
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
