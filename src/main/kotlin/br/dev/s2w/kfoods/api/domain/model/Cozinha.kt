@@ -11,5 +11,5 @@ data class Cozinha(
     val id: Long,
 
     @Column(nullable = false)
-    var nome: String
+    var nome: String = ""
 )

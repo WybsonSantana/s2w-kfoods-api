@@ -10,13 +10,13 @@ data class Restaurante(
     val id: Long,
 
     @Column(nullable = false)
-    val nome: String,
+    var nome: String = "",
 
     @Column(name = "taxa_frete", nullable = false)
-    val taxaFrete: BigDecimal,
+    var taxaFrete: BigDecimal = BigDecimal.valueOf(0),
 
     @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
-    val cozinha: Cozinha
+    var cozinha: Cozinha
 
 )
