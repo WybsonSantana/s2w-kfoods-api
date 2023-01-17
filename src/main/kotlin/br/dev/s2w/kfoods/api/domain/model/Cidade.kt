@@ -1,23 +1,17 @@
 package br.dev.s2w.kfoods.api.domain.model
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
+import javax.persistence.*
 
 @Entity
 data class Cidade(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    var id: Long,
 
     @Column(nullable = false)
-    val nome: String,
+    var nome: String = "",
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    val estado: Estado
+    var estado: Estado
 )

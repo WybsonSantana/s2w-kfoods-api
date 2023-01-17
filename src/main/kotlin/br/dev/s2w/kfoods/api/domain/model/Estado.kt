@@ -6,8 +6,8 @@ import javax.persistence.*
 data class Estado(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    var id: Long,
 
     @Column(nullable = false)
-    val nome: String
+    var nome: String = ""
 )

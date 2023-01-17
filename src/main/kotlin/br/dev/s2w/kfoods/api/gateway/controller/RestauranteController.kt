@@ -38,19 +38,17 @@ class RestauranteController(
     }
 
     @PutMapping("/{restauranteId}")
-    fun atualizar(
-        @PathVariable restauranteId: Long,
-        @RequestBody restaurante: Restaurante
-    ): ResponseEntity<Any> {
-        try {
+    fun atualizar(@PathVariable restauranteId: Long, @RequestBody restaurante: Restaurante): ResponseEntity<Any> {
+        return try {
             val restauranteAtual = restauranteRepository.buscar(restauranteId)
                 ?: return ResponseEntity.notFound().build()
-println(restaurante.nome)
-            println(restaurante.taxaFrete)
+
             BeanUtils.copyProperties(restaurante, restauranteAtual, "id")
-            return ResponseEntity.ok(cadastroRestaurante.salvar(restauranteAtual))
+
+            cadastroRestaurante.salvar(restauranteAtual)
+            ResponseEntity.ok(restauranteAtual)
         } catch (ex: EntidadeNaoEncontradaException) {
-            return ResponseEntity.badRequest().body(ex.message)
+            ResponseEntity.badRequest().body(ex.message)
         }
     }
 

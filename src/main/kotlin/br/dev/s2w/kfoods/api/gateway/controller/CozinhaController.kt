@@ -6,11 +6,9 @@ import br.dev.s2w.kfoods.api.domain.model.Cozinha
 import br.dev.s2w.kfoods.api.domain.repository.CozinhaRepository
 import br.dev.s2w.kfoods.api.domain.service.CadastroCozinhaService
 import org.springframework.beans.BeanUtils
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import javax.persistence.PersistenceException
 
 @RestController
 @RequestMapping("/cozinhas")
@@ -32,32 +30,25 @@ class CozinhaController(
     }
 
     @PostMapping
-    fun adicionar(@RequestBody cozinha: Cozinha): ResponseEntity<Cozinha> {
-        try {
-            if (cozinha.nome != "") {
-                return ResponseEntity.status(HttpStatus.CREATED).body(cadastroCozinha.salvar(cozinha))
-            }
-
-            return ResponseEntity.badRequest().build()
-        } catch (ex: PersistenceException) {
-            return ResponseEntity.badRequest().build()
+    fun adicionar(@RequestBody cozinha: Cozinha): ResponseEntity<Any> {
+        return try {
+            ResponseEntity.status(HttpStatus.CREATED).body(cadastroCozinha.salvar(cozinha))
+        } catch (ex: EntidadeNaoEncontradaException) {
+            ResponseEntity.badRequest().body(ex.message)
         }
     }
 
     @PutMapping("/{cozinhaId}")
-    fun atualizar(@PathVariable cozinhaId: Long, @RequestBody cozinha: Cozinha): ResponseEntity<Cozinha> {
+    fun atualizar(@PathVariable cozinhaId: Long, @RequestBody cozinha: Cozinha): ResponseEntity<Any> {
         return try {
             val cozinhaAtual = cozinhaRepository.buscar(cozinhaId) ?: return ResponseEntity.notFound().build()
 
-            if (cozinha.nome != "") {
-                BeanUtils.copyProperties(cozinha, cozinhaAtual, "id")
+            BeanUtils.copyProperties(cozinha, cozinhaAtual, "id")
 
-                return ResponseEntity.ok(cadastroCozinha.salvar(cozinhaAtual))
-            }
-
-            ResponseEntity.badRequest().build()
-        } catch (ex: DataIntegrityViolationException) {
-            ResponseEntity.badRequest().build()
+            cadastroCozinha.salvar(cozinhaAtual)
+            ResponseEntity.ok(cozinhaAtual)
+        } catch (ex: EntidadeNaoEncontradaException) {
+            ResponseEntity.badRequest().body(ex.message)
         }
     }
 

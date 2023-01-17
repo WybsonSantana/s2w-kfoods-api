@@ -17,8 +17,8 @@ class CozinhaRepositoryImpl(
         return manager.createQuery("from Cozinha", Cozinha::class.java).resultList
     }
 
-    override fun buscar(id: Long): Cozinha? {
-        return manager.find(Cozinha::class.java, id)
+    override fun buscar(cozinhaId: Long): Cozinha? {
+        return manager.find(Cozinha::class.java, cozinhaId)
     }
 
     @Transactional
@@ -29,7 +29,6 @@ class CozinhaRepositoryImpl(
     @Transactional
     override fun remover(cozinhaId: Long) {
         val cozinha = buscar(cozinhaId) ?: throw EmptyResultDataAccessException(1)
-
         manager.remove(cozinha)
     }
 

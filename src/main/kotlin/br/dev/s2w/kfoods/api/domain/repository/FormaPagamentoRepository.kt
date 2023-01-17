@@ -4,7 +4,7 @@ import br.dev.s2w.kfoods.api.domain.model.FormaPagamento
 
 interface FormaPagamentoRepository {
     fun listar(): List<FormaPagamento>
-    fun buscar(id: Long): FormaPagamento
+    fun buscar(formaPagamentoId: Long): FormaPagamento?
     fun salvar(formaPagamento: FormaPagamento): FormaPagamento
     fun remover(formaPagamento: FormaPagamento)
 

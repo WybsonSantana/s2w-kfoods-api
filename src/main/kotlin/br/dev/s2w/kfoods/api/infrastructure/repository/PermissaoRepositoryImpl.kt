@@ -16,8 +16,8 @@ class PermissaoRepositoryImpl(
         return manager.createQuery("from Permissao", Permissao::class.java).resultList
     }
 
-    override fun buscar(id: Long): Permissao {
-        return manager.find(Permissao::class.java, id)
+    override fun buscar(permissaoId: Long): Permissao? {
+        return manager.find(Permissao::class.java, permissaoId)
     }
 
     @Transactional

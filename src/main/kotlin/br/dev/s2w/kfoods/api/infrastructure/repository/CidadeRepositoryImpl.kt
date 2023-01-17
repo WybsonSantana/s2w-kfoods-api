@@ -2,6 +2,7 @@ package br.dev.s2w.kfoods.api.infrastructure.repository
 
 import br.dev.s2w.kfoods.api.domain.model.Cidade
 import br.dev.s2w.kfoods.api.domain.repository.CidadeRepository
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
@@ -16,8 +17,8 @@ class CidadeRepositoryImpl(
         return manager.createQuery("from Cidade", Cidade::class.java).resultList
     }
 
-    override fun buscar(id: Long): Cidade {
-        return manager.find(Cidade::class.java, id)
+    override fun buscar(cidadeId: Long): Cidade? {
+        return manager.find(Cidade::class.java, cidadeId)
     }
 
     @Transactional
@@ -26,8 +27,9 @@ class CidadeRepositoryImpl(
     }
 
     @Transactional
-    override fun remover(cidade: Cidade) {
-        manager.remove(buscar(cidade.id))
+    override fun remover(cidadeId: Long) {
+        val cidade = buscar(cidadeId) ?: throw EmptyResultDataAccessException(1)
+        manager.remove(cidade)
     }
 
 }

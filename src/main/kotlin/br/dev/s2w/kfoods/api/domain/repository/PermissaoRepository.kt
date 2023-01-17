@@ -4,7 +4,7 @@ import br.dev.s2w.kfoods.api.domain.model.Permissao
 
 interface PermissaoRepository {
     fun listar(): List<Permissao>
-    fun buscar(id: Long): Permissao
+    fun buscar(permissaoId: Long): Permissao?
     fun salvar(permissao: Permissao): Permissao
     fun remover(permissao: Permissao)
 

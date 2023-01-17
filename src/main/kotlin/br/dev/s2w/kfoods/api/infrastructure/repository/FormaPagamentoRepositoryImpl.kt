@@ -16,8 +16,8 @@ class FormaPagamentoRepositoryImpl(
         return manager.createQuery("from FormaPagamento", FormaPagamento::class.java).resultList
     }
 
-    override fun buscar(id: Long): FormaPagamento {
-        return manager.find(FormaPagamento::class.java, id)
+    override fun buscar(formaPagamentoId: Long): FormaPagamento? {
+        return manager.find(FormaPagamento::class.java, formaPagamentoId)
     }
 
     @Transactional
