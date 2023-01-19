@@ -52,4 +52,24 @@ class RestauranteController(
         }
     }
 
+    @PatchMapping("/{restauranteId}")
+    fun atualizarParcial(
+        @PathVariable restauranteId: Long?,
+        @RequestBody campos: Map<String?, Any?>?
+    ): ResponseEntity<*>? {
+        val restauranteAtual = restauranteRepository.buscar(restauranteId!!)
+            ?: return ResponseEntity.notFound().build<Any>()
+
+        merge(campos, restauranteAtual)
+
+        return atualizar(restauranteId, restauranteAtual)
+    }
+
+    private fun merge(camposOrigem: Map<String?, Any?>?, restauranteDestino: Restaurante) {
+        camposOrigem?.forEach { (nomePropriedade: String?, valorPropriedade: Any?) ->
+            println(
+                "$nomePropriedade = $valorPropriedade"
+            )
+        }
+    }
 }
