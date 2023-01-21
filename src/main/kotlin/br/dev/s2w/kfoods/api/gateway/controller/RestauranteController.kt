@@ -4,9 +4,11 @@ import br.dev.s2w.kfoods.api.domain.exception.EntidadeNaoEncontradaException
 import br.dev.s2w.kfoods.api.domain.model.Restaurante
 import br.dev.s2w.kfoods.api.domain.repository.RestauranteRepository
 import br.dev.s2w.kfoods.api.domain.service.CadastroRestauranteService
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.util.ReflectionUtils
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -54,22 +56,32 @@ class RestauranteController(
 
     @PatchMapping("/{restauranteId}")
     fun atualizarParcial(
-        @PathVariable restauranteId: Long?,
+        @PathVariable restauranteId: Long,
         @RequestBody campos: Map<String?, Any?>?
-    ): ResponseEntity<*>? {
-        val restauranteAtual = restauranteRepository.buscar(restauranteId!!)
-            ?: return ResponseEntity.notFound().build<Any>()
+    ): ResponseEntity<Any>? {
+        val restauranteAtual = restauranteRepository.buscar(restauranteId)
+            ?: return ResponseEntity.notFound().build()
 
         merge(campos, restauranteAtual)
 
         return atualizar(restauranteId, restauranteAtual)
     }
 
-    private fun merge(camposOrigem: Map<String?, Any?>?, restauranteDestino: Restaurante) {
-        camposOrigem?.forEach { (nomePropriedade: String?, valorPropriedade: Any?) ->
-            println(
-                "$nomePropriedade = $valorPropriedade"
-            )
+    private fun merge(dadosOrigem: Map<String?, Any?>?, restauranteDestino: Restaurante?) {
+        val objectMapper = ObjectMapper()
+        val restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante::class.java)
+
+        dadosOrigem?.forEach { (nomePropriedade: String?, valorPropriedade: Any?) ->
+            val field = ReflectionUtils.findField(Restaurante::class.java, nomePropriedade!!)
+            field!!.isAccessible = true
+
+            val novoValor = ReflectionUtils.getField(field, restauranteOrigem)
+
+            println("nome propriedade: $nomePropriedade \n valor propriedade: $valorPropriedade \n novo valor: $novoValor")
+
+            ReflectionUtils.setField(field, restauranteDestino, novoValor)
         }
     }
+
+
 }
