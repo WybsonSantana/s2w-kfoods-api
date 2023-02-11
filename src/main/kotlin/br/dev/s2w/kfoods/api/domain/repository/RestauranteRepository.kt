@@ -1,11 +1,8 @@
 package br.dev.s2w.kfoods.api.domain.repository
 
 import br.dev.s2w.kfoods.api.domain.model.Restaurante
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
-interface RestauranteRepository {
-    fun listar(): List<Restaurante>
-    fun buscar(restauranteId: Long): Restaurante?
-    fun salvar(restaurante: Restaurante): Restaurante
-    fun remover(restauranteId: Long)
-
-}
+@Repository
+interface RestauranteRepository : JpaRepository<Restaurante, Long>

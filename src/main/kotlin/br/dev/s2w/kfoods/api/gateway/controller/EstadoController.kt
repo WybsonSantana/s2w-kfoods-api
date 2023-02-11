@@ -19,12 +19,13 @@ class EstadoController(
 
     @GetMapping
     fun listar(): List<Estado> {
-        return estadoRepository.listar()
+        return estadoRepository.findAll()
     }
 
     @GetMapping("/{estadoId}")
     fun buscar(@PathVariable estadoId: Long): ResponseEntity<Estado> {
-        val estado = estadoRepository.buscar(estadoId) ?: return ResponseEntity.notFound().build()
+        val estado = estadoRepository.findById(estadoId).orElse(null)
+            ?: return ResponseEntity.notFound().build()
 
         return ResponseEntity.ok(estado)
     }
@@ -41,7 +42,8 @@ class EstadoController(
     @PutMapping("/{estadoId}")
     fun atualizar(@PathVariable estadoId: Long, @RequestBody estado: Estado): ResponseEntity<Any> {
         return try {
-            val estadoAtual = estadoRepository.buscar(estadoId) ?: return ResponseEntity.notFound().build()
+            val estadoAtual = estadoRepository.findById(estadoId).orElse(null)
+                ?: return ResponseEntity.notFound().build()
 
             BeanUtils.copyProperties(estado, estadoAtual, "id")
 

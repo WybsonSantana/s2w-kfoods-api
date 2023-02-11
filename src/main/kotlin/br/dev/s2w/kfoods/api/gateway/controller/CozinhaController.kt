@@ -24,13 +24,10 @@ class CozinhaController(
 
     @GetMapping("/{cozinhaId}")
     fun buscar(@PathVariable cozinhaId: Long): ResponseEntity<Cozinha> {
-        return try {
-            val cozinha = cozinhaRepository.findById(cozinhaId)
+        val cozinha = cozinhaRepository.findById(cozinhaId).orElse(null)
+            ?: return ResponseEntity.notFound().build()
 
-            ResponseEntity.ok(cozinha.get())
-        } catch (ex: NoSuchElementException) {
-            ResponseEntity.notFound().build()
-        }
+        return ResponseEntity.ok(cozinha)
     }
 
     @PostMapping
@@ -45,17 +42,13 @@ class CozinhaController(
     @PutMapping("/{cozinhaId}")
     fun atualizar(@PathVariable cozinhaId: Long, @RequestBody cozinha: Cozinha): ResponseEntity<Any> {
         return try {
-            val cozinhaAtual = cozinhaRepository.findById(cozinhaId)
+            val cozinhaAtual = cozinhaRepository.findById(cozinhaId).orElse(null)
+                ?: return ResponseEntity.notFound().build()
 
-            if (cozinhaAtual.isPresent) {
-                BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id")
+                BeanUtils.copyProperties(cozinha, cozinhaAtual, "id")
 
-                val cozinhaSalva = cadastroCozinha.salvar(cozinhaAtual.get())
-
+                val cozinhaSalva = cadastroCozinha.salvar(cozinhaAtual)
                 return ResponseEntity.ok(cozinhaSalva)
-            }
-
-            ResponseEntity.notFound().build()
         } catch (ex: EntidadeNaoEncontradaException) {
             ResponseEntity.badRequest().body(ex.message)
         }

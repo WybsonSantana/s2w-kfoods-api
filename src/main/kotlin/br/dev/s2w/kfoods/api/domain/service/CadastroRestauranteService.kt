@@ -20,6 +20,6 @@ class CadastroRestauranteService(
 
         val restauranteAtualizado = restaurante.copy(cozinha = cozinha)
 
-        return restauranteRepository.salvar(restauranteAtualizado)
+        return restauranteRepository.save(restauranteAtualizado)
     }
 }
