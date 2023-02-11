@@ -14,12 +14,12 @@ class CadastroCozinhaService(
 ) {
 
     fun salvar(cozinha: Cozinha): Cozinha {
-        return cozinhaRepository.salvar(cozinha)
+        return cozinhaRepository.save(cozinha)
     }
 
     fun excluir(cozinhaId: Long) {
         try {
-            cozinhaRepository.remover(cozinhaId)
+            cozinhaRepository.deleteById(cozinhaId)
         } catch (ex: EmptyResultDataAccessException) {
             throw EntidadeNaoEncontradaException("O cadastro de cozinha com ID $cozinhaId não foi encontrado")
         } catch (ex: DataIntegrityViolationException) {
