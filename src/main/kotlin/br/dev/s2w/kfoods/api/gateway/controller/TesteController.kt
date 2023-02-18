@@ -1,25 +1,42 @@
 package br.dev.s2w.kfoods.api.gateway.controller
 
 import br.dev.s2w.kfoods.api.domain.model.Cozinha
+import br.dev.s2w.kfoods.api.domain.model.Restaurante
 import br.dev.s2w.kfoods.api.domain.repository.CozinhaRepository
+import br.dev.s2w.kfoods.api.domain.repository.RestauranteRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.math.BigDecimal
 
 @RestController
 @RequestMapping("/teste")
 class TesteController(
-    private val cozinhaRepository: CozinhaRepository
+    private val cozinhaRepository: CozinhaRepository,
+    private val restauranteRepository: RestauranteRepository
 ) {
 
     @GetMapping("/cozinhas/por-nome")
     fun cozinhasPorNome(@RequestParam nome: String): List<Cozinha> {
-        return cozinhaRepository.findTodasByNome(nome)
+        return cozinhaRepository.findTodasByNomeContaining(nome)
     }
 
     @GetMapping("/cozinhas/unica-por-nome")
     fun cozinhaPorNome(@RequestParam nome: String): Cozinha? {
         return cozinhaRepository.findByNome(nome)
+    }
+
+    @GetMapping("/restaurantes/por-taxa-frete")
+    fun restaurantePorTaxaFrete(
+        @RequestParam taxaInicial: BigDecimal,
+        @RequestParam taxaFinal: BigDecimal
+    ): List<Restaurante> {
+        return restauranteRepository.findByTaxaFreteBetween(taxaInicial, taxaFinal)
+    }
+
+    @GetMapping("/restaurantes/por-nome")
+    fun restaurantesPorNome(@RequestParam nome: String, @RequestParam cozinhaId: Long): List<Restaurante> {
+        return restauranteRepository.findByNomeContainingAndCozinhaId(nome, cozinhaId)
     }
 }
