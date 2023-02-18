@@ -37,7 +37,7 @@ class TesteController(
 
     @GetMapping("/restaurantes/por-nome")
     fun restaurantesPorNome(@RequestParam nome: String, @RequestParam cozinhaId: Long): List<Restaurante> {
-        return restauranteRepository.findByNomeContainingAndCozinhaId(nome, cozinhaId)
+        return restauranteRepository.consultarPorNome(nome, cozinhaId)
     }
 
     @GetMapping("/restaurantes/primeiro-por-nome")
