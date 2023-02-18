@@ -39,4 +39,19 @@ class TesteController(
     fun restaurantesPorNome(@RequestParam nome: String, @RequestParam cozinhaId: Long): List<Restaurante> {
         return restauranteRepository.findByNomeContainingAndCozinhaId(nome, cozinhaId)
     }
+
+    @GetMapping("/restaurantes/primeiro-por-nome")
+    fun restaurantePrimeiroPorNome(@RequestParam nome: String): Restaurante? {
+        return restauranteRepository.findFirstRestauranteByNomeContaining(nome)
+    }
+
+    @GetMapping("/restaurantes/top2-por-nome")
+    fun restaurantesTop2PorNome(@RequestParam nome: String): List<Restaurante> {
+        return restauranteRepository.findTop2ByNomeContaining(nome)
+    }
+
+    @GetMapping("/restaurantes/count-por-cozinha")
+    fun restaurantesCountPorCozinha(@RequestParam cozinhaId: Long): Int {
+        return restauranteRepository.countByCozinhaId(cozinhaId)
+    }
 }

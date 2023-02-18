@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 interface CozinhaRepository : JpaRepository<Cozinha, Long> {
     fun findTodasByNomeContaining(nome: String): List<Cozinha>
     fun findByNome(nome: String): Cozinha?
+    fun existsByNome(nome: String): Boolean
 }
