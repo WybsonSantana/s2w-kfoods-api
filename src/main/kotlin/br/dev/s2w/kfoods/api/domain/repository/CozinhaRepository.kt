@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CozinhaRepository : JpaRepository<Cozinha, Long> {
-    //fun consultarPorNome(nome: String): List<Cozinha>
+    fun findTodasByNome(nome: String): List<Cozinha>
+    fun findByNome(nome: String): Cozinha?
 }
