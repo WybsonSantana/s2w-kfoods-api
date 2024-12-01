@@ -1,4 +1,4 @@
-package br.dev.s2w.dependency.injection.model
+package br.dev.s2w.kfoods.api.di.model
 
 data class Customer(
     val name: String,
