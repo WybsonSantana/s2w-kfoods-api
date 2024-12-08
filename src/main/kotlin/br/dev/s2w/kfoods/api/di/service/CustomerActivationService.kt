@@ -9,6 +9,10 @@ class CustomerActivationService(
     private val notifier: EmailNotifier
 ) {
 
+    init {
+        println("CustomerActivationService: $notifier")
+    }
+
     fun activate(customer: Customer) {
         customer.activate()
         notifier.notify(customer, "Your registration in the system is active!")

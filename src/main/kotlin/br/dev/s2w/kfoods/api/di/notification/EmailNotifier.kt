@@ -4,9 +4,13 @@ import br.dev.s2w.kfoods.api.di.model.Customer
 import org.springframework.stereotype.Component
 
 @Component
-class EmailNotifier {
+class EmailNotifier : Notifier {
 
-    fun notify(customer: Customer, message: String) {
+    init {
+        println("EmailNotifier")
+    }
+
+    override fun notify(customer: Customer, message: String) {
         println("Notifying ${customer.name} by e-mail ${customer.email}: $message")
     }
 }
