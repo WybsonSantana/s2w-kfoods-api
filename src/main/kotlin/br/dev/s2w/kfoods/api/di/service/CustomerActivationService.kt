@@ -1,12 +1,10 @@
 package br.dev.s2w.kfoods.api.di.service
 
 import br.dev.s2w.kfoods.api.di.model.Customer
-import br.dev.s2w.kfoods.api.di.notification.EmailNotifier
-import org.springframework.stereotype.Component
+import br.dev.s2w.kfoods.api.di.notification.Notifier
 
-@Component
 class CustomerActivationService(
-    private val notifier: EmailNotifier
+    private val notifier: Notifier
 ) {
 
     init {

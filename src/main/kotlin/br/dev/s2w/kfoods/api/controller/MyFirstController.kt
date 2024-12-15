@@ -1,4 +1,4 @@
-package br.dev.s2w.kfoods.api
+package br.dev.s2w.kfoods.api.controller
 
 import br.dev.s2w.kfoods.api.di.model.Customer
 import br.dev.s2w.kfoods.api.di.service.CustomerActivationService
