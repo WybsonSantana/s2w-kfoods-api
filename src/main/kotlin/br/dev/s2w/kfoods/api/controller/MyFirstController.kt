@@ -11,10 +11,6 @@ class MyFirstController(
     private val customerActivationService: CustomerActivationService
 ) {
 
-    init {
-        println("MyFirstController: $customerActivationService")
-    }
-
     @GetMapping("/hello")
     @ResponseBody
     fun hello(): String {
