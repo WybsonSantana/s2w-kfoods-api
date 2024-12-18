@@ -6,13 +6,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class CustomerActivationService(
-    private val notifiers: List<Notifier>
+    private val notifier: Notifier
 ) {
 
     fun activate(customer: Customer) {
         customer.activate()
 
-        for (notifier in notifiers)
-            notifier.notify(customer, "Your registration in the system is active!")
+        notifier.notify(customer, "Your registration in the system is active!")
     }
 }
