@@ -2,12 +2,13 @@ package br.dev.s2w.kfoods.api.di.service
 
 import br.dev.s2w.kfoods.api.di.model.Customer
 import br.dev.s2w.kfoods.api.di.notification.Notifier
-import org.springframework.beans.factory.annotation.Qualifier
+import br.dev.s2w.kfoods.api.di.notification.NotifierType
+import br.dev.s2w.kfoods.api.di.notification.UrgencyLevel
 import org.springframework.stereotype.Component
 
 @Component
 class CustomerActivationService(
-    @Qualifier("urgent")
+    @NotifierType(UrgencyLevel.URGENT)
     private val notifier: Notifier
 ) {
 
