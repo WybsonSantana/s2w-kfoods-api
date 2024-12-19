@@ -6,11 +6,13 @@ import br.dev.s2w.kfoods.api.di.notification.NotifierType
 import br.dev.s2w.kfoods.api.di.notification.UrgencyLevel
 import org.springframework.stereotype.Component
 
-@Component
 class CustomerActivationService(
-    @NotifierType(UrgencyLevel.NO_URGENCY)
     private val notifier: Notifier
 ) {
+
+    fun init() = println("INIT $notifier")
+
+    fun destroy() = println("DESTROY")
 
     fun activate(customer: Customer) {
         customer.activate()
