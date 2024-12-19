@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class CustomerActivationService(
-    @NotifierType(UrgencyLevel.URGENT)
+    @NotifierType(UrgencyLevel.NO_URGENCY)
     private val notifier: Notifier
 ) {
 
