@@ -6,17 +6,13 @@ import org.springframework.stereotype.Component
 
 @Component
 @NotifierType(UrgencyLevel.NO_URGENCY)
-class EmailNotifier : Notifier {
-
-    @Value("\${notifier.email.server-host}")
-    private val host: String? = null
-
-    @Value("\${notifier.email.server-port}")
-    private val port: Int? = null
+class EmailNotifier(
+    private val properties: NotifierProperties
+) : Notifier {
 
     override fun notify(customer: Customer, message: String) {
-        println("Server host: $host")
-        println("Server port: $port")
+        println("Server host: ${properties.serverHost}")
+        println("Server port: ${properties.serverPort}")
 
         println("Notifying ${customer.name} by e-mail ${customer.email}: $message")
     }
