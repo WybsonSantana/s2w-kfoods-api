@@ -1,13 +1,12 @@
 package br.dev.s2w.kfoods.api.domain.model
 
 import java.math.BigDecimal
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
-class Restaurant(
+data class Restaurant(
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long,
 
     var name: String,
