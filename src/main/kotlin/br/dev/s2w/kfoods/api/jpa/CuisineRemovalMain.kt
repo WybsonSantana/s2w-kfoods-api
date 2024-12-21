@@ -2,6 +2,7 @@ package br.dev.s2w.kfoods.api.jpa
 
 import br.dev.s2w.kfoods.api.S2wKfoodsApiApplication
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
+import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.builder.SpringApplicationBuilder
 
@@ -10,9 +11,9 @@ fun main(args: Array<String>) {
         .web(WebApplicationType.NONE)
         .run(*args)
 
-    val cuisineRegistration = applicationContext.getBean(CuisineRegistration::class.java)
+    val cuisineRepository = applicationContext.getBean(CuisineRepository::class.java)
 
     val cuisine = Cuisine(id = 1L)
 
-    cuisineRegistration.remove(cuisine)
+    cuisineRepository.remove(cuisine)
 }
