@@ -12,12 +12,7 @@ fun main(args: Array<String>) {
 
     val cuisineRegistration = applicationContext.getBean(CuisineRegistration::class.java)
 
-    var cuisine1 = Cuisine(name = "Brasileira")
-    var cuisine2 = Cuisine(name = "Japonesa")
+    val cuisine = Cuisine(id = 1L, name = "Brasileira")
 
-    cuisine1 = cuisineRegistration.save(cuisine1)
-    cuisine2 = cuisineRegistration.save(cuisine2)
-
-    println("${cuisine1.id} - ${cuisine1.name}")
-    println("${cuisine2.id} - ${cuisine2.name}")
+    cuisineRegistration.save(cuisine)
 }

@@ -20,7 +20,7 @@ class CuisineRegistration {
         manager.find(Cuisine::class.java, id)
 
     @Transactional
-    fun add(cuisine: Cuisine) =
+    fun save(cuisine: Cuisine) =
         manager.merge(cuisine)
 
 }
