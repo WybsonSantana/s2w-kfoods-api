@@ -9,7 +9,7 @@ import javax.persistence.Id
 data class Cuisine(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long,
+    var id: Long? = null,
 
     var name: String
 )
