@@ -11,5 +11,5 @@ data class Cuisine(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    var name: String
+    var name: String? = null
 )

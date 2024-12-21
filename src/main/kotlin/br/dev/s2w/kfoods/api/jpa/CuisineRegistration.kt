@@ -16,11 +16,15 @@ class CuisineRegistration {
         .createQuery("from Cuisine", Cuisine::class.java)
         .resultList
 
-    fun search(id: Long) =
+    fun search(id: Long): Cuisine =
         manager.find(Cuisine::class.java, id)
 
     @Transactional
-    fun save(cuisine: Cuisine) =
+    fun save(cuisine: Cuisine): Cuisine =
         manager.merge(cuisine)
+
+    @Transactional
+    fun remove(cuisine: Cuisine) =
+        manager.remove(search(cuisine.id!!))
 
 }
