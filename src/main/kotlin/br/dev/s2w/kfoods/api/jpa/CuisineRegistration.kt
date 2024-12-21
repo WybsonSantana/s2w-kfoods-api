@@ -16,6 +16,9 @@ class CuisineRegistration {
         .createQuery("from Cuisine", Cuisine::class.java)
         .resultList
 
+    fun search(id: Long) =
+        manager.find(Cuisine::class.java, id)
+
     @Transactional
     fun add(cuisine: Cuisine) =
         manager.merge(cuisine)
