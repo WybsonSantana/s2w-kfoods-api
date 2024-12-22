@@ -1,7 +1,7 @@
 package br.dev.s2w.kfoods.api.jpa
 
 import br.dev.s2w.kfoods.api.S2wKfoodsApiApplication
-import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepository
+import br.dev.s2w.kfoods.api.domain.repository.PermissionRepository
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.builder.SpringApplicationBuilder
 
@@ -10,9 +10,9 @@ fun main(args: Array<String>) {
         .web(WebApplicationType.NONE)
         .run(*args)
 
-    val restaurantRepository = applicationContext.getBean(RestaurantRepository::class.java)
-    val restaurants = restaurantRepository.list()
+    val permissionRepository = applicationContext.getBean(PermissionRepository::class.java)
+    val permissions = permissionRepository.list()
 
-    for (restaurant in restaurants)
-        println(restaurant.name)
+    for (permission in permissions)
+        println(permission.name)
 }
