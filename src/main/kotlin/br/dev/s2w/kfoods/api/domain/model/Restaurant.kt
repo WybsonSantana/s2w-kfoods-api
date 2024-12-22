@@ -9,12 +9,13 @@ data class Restaurant(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
+    @Column(nullable = false)
     var name: String? = null,
 
-    @Column(name = "delivery_fee")
+    @Column(name = "delivery_fee", nullable = false)
     var deliveryFee: BigDecimal? = null,
 
     @ManyToOne
-    @JoinColumn(name = "cuisine_id")
+    @JoinColumn(name = "cuisine_id", nullable = false)
     var cuisine: Cuisine? = null
 )
