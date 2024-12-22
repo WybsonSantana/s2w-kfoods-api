@@ -9,8 +9,8 @@ data class Restaurant(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    var name: String,
+    var name: String? = null,
 
     @Column(name = "delivery_fee")
-    var deliveryFee: BigDecimal
+    var deliveryFee: BigDecimal? = null
 )
