@@ -12,5 +12,8 @@ data class Restaurant(
     var name: String? = null,
 
     @Column(name = "delivery_fee")
-    var deliveryFee: BigDecimal? = null
+    var deliveryFee: BigDecimal? = null,
+
+    @ManyToOne
+    var cuisine: Cuisine? = null
 )
