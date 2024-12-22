@@ -15,5 +15,6 @@ data class Restaurant(
     var deliveryFee: BigDecimal? = null,
 
     @ManyToOne
+    @JoinColumn(name = "cuisine_id")
     var cuisine: Cuisine? = null
 )
