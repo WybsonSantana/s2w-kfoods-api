@@ -3,6 +3,7 @@ package br.dev.s2w.kfoods.api.adapter.controller
 import br.dev.s2w.kfoods.api.adapter.model.CuisinesXmlWrapper
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
+import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -25,10 +26,9 @@ class CuisineController(
     @GetMapping("/{cuisineId}")
     fun search(@PathVariable cuisineId: Long): ResponseEntity<Cuisine> {
         val cuisine = cuisineRepository.search(cuisineId)
+            ?: return ResponseEntity.notFound().build()
 
-        if (cuisine != null) return ResponseEntity.ok(cuisine)
-
-        return ResponseEntity.notFound().build()
+        return ResponseEntity.ok(cuisine)
     }
 
     @PostMapping
@@ -36,5 +36,14 @@ class CuisineController(
     fun add(@RequestBody cuisine: Cuisine): Cuisine =
         cuisineRepository.save(cuisine)
 
+    @PutMapping("/{cuisineId}")
+    fun update(@PathVariable cuisineId: Long, @RequestBody cuisine: Cuisine): ResponseEntity<Cuisine> {
+        val currentCuisine = cuisineRepository.search(cuisineId)
+            ?: return ResponseEntity.notFound().build()
+
+        BeanUtils.copyProperties(cuisine, currentCuisine, "id")
+
+        return ResponseEntity.ok(cuisineRepository.save(currentCuisine))
+    }
 
 }
