@@ -3,7 +3,6 @@ package br.dev.s2w.kfoods.api.adapter.controller
 import br.dev.s2w.kfoods.api.adapter.model.CuisinesXmlWrapper
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -31,5 +30,11 @@ class CuisineController(
 
         return ResponseEntity.notFound().build()
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    fun add(@RequestBody cuisine: Cuisine): Cuisine =
+        cuisineRepository.save(cuisine)
+
 
 }
