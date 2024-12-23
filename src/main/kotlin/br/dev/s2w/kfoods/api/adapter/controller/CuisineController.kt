@@ -3,6 +3,7 @@ package br.dev.s2w.kfoods.api.adapter.controller
 import br.dev.s2w.kfoods.api.adapter.model.CuisinesXmlWrapper
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
+import br.dev.s2w.kfoods.api.domain.service.CuisineRegisterService
 import org.springframework.beans.BeanUtils
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/cuisines")
 class CuisineController(
-    private val cuisineRepository: CuisineRepository
+    private val cuisineRepository: CuisineRepository,
+    private val cuisineRegister: CuisineRegisterService
 ) {
 
     @GetMapping
@@ -35,7 +37,7 @@ class CuisineController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun add(@RequestBody cuisine: Cuisine): Cuisine =
-        cuisineRepository.save(cuisine)
+        cuisineRegister.save(cuisine)
 
     @PutMapping("/{cuisineId}")
     fun update(@PathVariable cuisineId: Long, @RequestBody cuisine: Cuisine): ResponseEntity<Cuisine> {
