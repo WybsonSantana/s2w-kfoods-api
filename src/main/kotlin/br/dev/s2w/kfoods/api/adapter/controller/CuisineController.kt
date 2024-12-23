@@ -4,6 +4,7 @@ import br.dev.s2w.kfoods.api.adapter.model.CuisinesXmlWrapper
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
 import org.springframework.beans.BeanUtils
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -44,6 +45,20 @@ class CuisineController(
         BeanUtils.copyProperties(cuisine, currentCuisine, "id")
 
         return ResponseEntity.ok(cuisineRepository.save(currentCuisine))
+    }
+
+    @DeleteMapping("/{cuisineId}")
+    fun remove(@PathVariable cuisineId: Long): ResponseEntity<Cuisine> {
+        try {
+            val currentCuisine = cuisineRepository.search(cuisineId)
+                ?: return ResponseEntity.notFound().build()
+
+            cuisineRepository.remove(currentCuisine)
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+        } catch (e: DataIntegrityViolationException) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build()
+        }
     }
 
 }
