@@ -1,4 +1,4 @@
-package br.dev.s2w.kfoods.api.controller
+package br.dev.s2w.kfoods.api.adapter.controller
 
 import br.dev.s2w.kfoods.api.domain.model.State
 import br.dev.s2w.kfoods.api.domain.repository.StateRepository
