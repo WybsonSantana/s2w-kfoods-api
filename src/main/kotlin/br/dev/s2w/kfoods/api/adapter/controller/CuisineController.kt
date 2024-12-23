@@ -3,11 +3,9 @@ package br.dev.s2w.kfoods.api.adapter.controller
 import br.dev.s2w.kfoods.api.adapter.model.CuisinesXmlWrapper
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/cuisines")
@@ -23,6 +21,7 @@ class CuisineController(
     fun listXml(): CuisinesXmlWrapper =
         CuisinesXmlWrapper(cuisineRepository.list())
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{cuisineId}")
     fun search(@PathVariable cuisineId: Long): Cuisine =
         cuisineRepository.search(cuisineId)
