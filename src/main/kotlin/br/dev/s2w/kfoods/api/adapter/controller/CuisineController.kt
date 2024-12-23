@@ -27,17 +27,9 @@ class CuisineController(
     fun search(@PathVariable cuisineId: Long): ResponseEntity<Cuisine> {
         val cuisine = cuisineRepository.search(cuisineId)
 
-        //return ResponseEntity.status(HttpStatus.OK).body(cuisine)
-        //return ResponseEntity.ok(cuisine)
+        if (cuisine != null) return ResponseEntity.ok(cuisine)
 
-        val headers = HttpHeaders().apply {
-            add(HttpHeaders.LOCATION, "http://api.kfoods.local:8080/cuisines")
-        }
-
-        return ResponseEntity
-            .status(HttpStatus.FOUND)
-            .headers(headers)
-            .build()
+        return ResponseEntity.notFound().build()
     }
 
 }

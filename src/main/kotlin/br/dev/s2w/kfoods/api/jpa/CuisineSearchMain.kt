@@ -14,5 +14,5 @@ fun main(args: Array<String>) {
 
     val cuisine = cuisineRepository.search(1L)
 
-    println(cuisine.name)
+    println(cuisine?.name)
 }
