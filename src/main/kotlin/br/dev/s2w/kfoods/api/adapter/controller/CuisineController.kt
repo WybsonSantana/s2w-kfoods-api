@@ -1,13 +1,12 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
-import br.dev.s2w.kfoods.api.adapter.model.CuisinesXmlWrapper
+import br.dev.s2w.kfoods.api.domain.exception.EntityInUseException
+import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
 import br.dev.s2w.kfoods.api.domain.service.CuisineRegisterService
 import org.springframework.beans.BeanUtils
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -19,12 +18,8 @@ class CuisineController(
 ) {
 
     @GetMapping
-    fun listJson(): List<Cuisine> =
+    fun list(): List<Cuisine> =
         cuisineRepository.list()
-
-    @GetMapping(produces = [MediaType.APPLICATION_XML_VALUE])
-    fun listXml(): CuisinesXmlWrapper =
-        CuisinesXmlWrapper(cuisineRepository.list())
 
     @GetMapping("/{cuisineId}")
     fun search(@PathVariable cuisineId: Long): ResponseEntity<Cuisine> {
@@ -46,19 +41,17 @@ class CuisineController(
 
         BeanUtils.copyProperties(cuisine, currentCuisine, "id")
 
-        return ResponseEntity.ok(cuisineRepository.save(currentCuisine))
+        return ResponseEntity.ok(cuisineRegister.save(currentCuisine))
     }
 
     @DeleteMapping("/{cuisineId}")
     fun remove(@PathVariable cuisineId: Long): ResponseEntity<Cuisine> {
         try {
-            val currentCuisine = cuisineRepository.search(cuisineId)
-                ?: return ResponseEntity.notFound().build()
-
-            cuisineRepository.remove(currentCuisine)
-
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
-        } catch (e: DataIntegrityViolationException) {
+            cuisineRegister.remove(cuisineId)
+            return ResponseEntity.noContent().build()
+        } catch (e: EntityNotFoundException) {
+            return ResponseEntity.notFound().build()
+        } catch (e: EntityInUseException) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build()
         }
     }

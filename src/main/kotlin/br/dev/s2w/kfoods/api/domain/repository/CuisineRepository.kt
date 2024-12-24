@@ -6,5 +6,5 @@ interface CuisineRepository {
     fun list(): List<Cuisine>
     fun search(id: Long): Cuisine?
     fun save(cuisine: Cuisine): Cuisine
-    fun remove(cuisine: Cuisine)
+    fun remove(cuisineId: Long)
 }

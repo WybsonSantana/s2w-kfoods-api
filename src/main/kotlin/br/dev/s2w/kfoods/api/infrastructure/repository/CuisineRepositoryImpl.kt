@@ -2,6 +2,7 @@ package br.dev.s2w.kfoods.api.infrastructure.repository
 
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
@@ -25,7 +26,10 @@ class CuisineRepositoryImpl : CuisineRepository {
         manager.merge(cuisine)
 
     @Transactional
-    override fun remove(cuisine: Cuisine) =
-        manager.remove(search(cuisine.id!!))
+    override fun remove(cuisineId: Long) {
+        val cuisine = search(cuisineId)
+            ?: throw EmptyResultDataAccessException(1)
 
+        manager.remove(cuisine)
+    }
 }
