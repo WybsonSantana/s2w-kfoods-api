@@ -17,7 +17,7 @@ class RestaurantRepositoryImpl : RestaurantRepository {
         .createQuery("from Restaurant", Restaurant::class.java)
         .resultList
 
-    override fun search(id: Long): Restaurant =
+    override fun search(id: Long): Restaurant? =
         manager.find(Restaurant::class.java, id)
 
     @Transactional
