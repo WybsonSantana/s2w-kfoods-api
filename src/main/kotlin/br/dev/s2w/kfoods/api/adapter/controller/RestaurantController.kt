@@ -4,9 +4,11 @@ import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
 import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepository
 import br.dev.s2w.kfoods.api.domain.service.RestaurantRegisterService
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.util.ReflectionUtils
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -66,11 +68,19 @@ class RestaurantController(
 
     }
 
-
     private fun merge(fields: Map<String, Any>, targetRestaurant: Restaurant) {
+        val mapper = ObjectMapper()
+        val currentRestaurant = mapper.convertValue(fields, Restaurant::class.java)
+
         fields.forEach { (key, value) ->
-            println("$key = $value")
+            val field = ReflectionUtils.findField(Restaurant::class.java, key)
+            field?.isAccessible = true
+
+            ReflectionUtils.getField(field!!, currentRestaurant).also {
+                ReflectionUtils.setField(field, targetRestaurant, it)
+            }
         }
     }
+
 
 }
