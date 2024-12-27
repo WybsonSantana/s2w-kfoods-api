@@ -18,6 +18,11 @@ class CuisineRepositoryImpl : CuisineRepository {
         .createQuery("from Cuisine", Cuisine::class.java)
         .resultList
 
+    override fun findByName(name: String): List<Cuisine> =
+        manager.createQuery("from Cuisine where name like :name", Cuisine::class.java)
+            .setParameter("name", "%$name%")
+            .resultList
+
     override fun search(id: Long?): Cuisine? =
         manager.find(Cuisine::class.java, id)
 
