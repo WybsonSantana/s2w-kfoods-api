@@ -38,7 +38,7 @@ class TestController(
 
     @GetMapping("/restaurants/by-name")
     fun findRestaurantsByName(@RequestParam name: String, cuisineId: Long): List<Restaurant> =
-        restaurantRepository.findByNameContainingAndCuisineId(name, cuisineId)
+        restaurantRepository.queryByName(name, cuisineId)
 
     @GetMapping("/restaurants/first-by-name")
     fun findFirstRestaurantByName(@RequestParam name: String): Restaurant? =
