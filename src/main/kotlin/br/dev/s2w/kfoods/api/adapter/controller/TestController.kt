@@ -13,8 +13,11 @@ class TestController(
     private val cuisineRepository: CuisineRepository
 ) {
 
-//    @GetMapping("/cuisines/by-name")
-//    fun findCuisinesByName(@RequestParam("name") name: String): List<Cuisine> =
-//        cuisineRepository.findByName(name)
+    @GetMapping("/cuisines/by-name")
+    fun findCuisinesByName(@RequestParam name: String): List<Cuisine> =
+        cuisineRepository.findAllByName(name)
 
+    @GetMapping("/cuisines/unique-by-name")
+    fun findCuisineByName(@RequestParam name: String): Cuisine? =
+        cuisineRepository.findByName(name)
 }
