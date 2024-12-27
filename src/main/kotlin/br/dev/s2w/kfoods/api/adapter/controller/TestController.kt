@@ -25,6 +25,10 @@ class TestController(
     fun findCuisineByName(@RequestParam name: String): Cuisine? =
         cuisineRepository.findByName(name)
 
+    @GetMapping("/cuisines/exists")
+    fun cuisineExists(@RequestParam name: String): Boolean =
+        cuisineRepository.existsByName(name)
+
     @GetMapping("/restaurants/by-delivery-fee")
     fun findRestaurantsByDeliveryFee(
         @RequestParam initialFee: BigDecimal,
@@ -35,5 +39,17 @@ class TestController(
     @GetMapping("/restaurants/by-name")
     fun findRestaurantsByName(@RequestParam name: String, cuisineId: Long): List<Restaurant> =
         restaurantRepository.findByNameContainingAndCuisineId(name, cuisineId)
+
+    @GetMapping("/restaurants/first-by-name")
+    fun findFirstRestaurantByName(@RequestParam name: String): Restaurant? =
+        restaurantRepository.getFirstRestaurantByNameContaining(name)
+
+    @GetMapping("/restaurants/top-two-by-name")
+    fun findTopTwoRestaurantsByName(@RequestParam name: String): List<Restaurant> =
+        restaurantRepository.queryTop2ByNameContaining(name)
+
+    @GetMapping("/restaurants/count-by-cuisine")
+    fun countRestaurantsByCuisine(@RequestParam cuisineId: Long): Int =
+        restaurantRepository.countByCuisineId(cuisineId)
 
 }

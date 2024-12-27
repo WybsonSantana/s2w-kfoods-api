@@ -9,4 +9,8 @@ import java.math.BigDecimal
 interface RestaurantRepository : JpaRepository<Restaurant, Long> {
     fun findByDeliveryFeeBetween(initialFee: BigDecimal, finalFee: BigDecimal): List<Restaurant>
     fun findByNameContainingAndCuisineId(name: String, cuisineId: Long): List<Restaurant>
+    fun getFirstRestaurantByNameContaining(name: String): Restaurant?
+    fun queryTop2ByNameContaining(name: String): List<Restaurant>
+    fun countByCuisineId(cuisineId: Long): Int
+
 }
