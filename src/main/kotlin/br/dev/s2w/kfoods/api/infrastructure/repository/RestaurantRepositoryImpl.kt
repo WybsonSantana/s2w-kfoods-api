@@ -17,15 +17,15 @@ class RestaurantRepositoryImpl : RestaurantRepository {
         .createQuery("from Restaurant", Restaurant::class.java)
         .resultList
 
-    override fun search(id: Long): Restaurant? =
-        manager.find(Restaurant::class.java, id)
+    override fun search(restaurantId: Long?): Restaurant? =
+        manager.find(Restaurant::class.java, restaurantId)
 
     @Transactional
     override fun save(restaurant: Restaurant): Restaurant =
         manager.merge(restaurant)
 
     @Transactional
-    override fun remove(restaurant: Restaurant) =
-        manager.remove(search(restaurant.id!!))
+    override fun remove(restaurantId: Long) =
+        manager.remove(search(restaurantId))
 
 }

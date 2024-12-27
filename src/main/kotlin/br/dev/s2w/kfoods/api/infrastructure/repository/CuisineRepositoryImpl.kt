@@ -22,8 +22,9 @@ class CuisineRepositoryImpl : CuisineRepository {
         manager.find(Cuisine::class.java, id)
 
     @Transactional
-    override fun save(cuisine: Cuisine): Cuisine =
-        manager.merge(cuisine)
+    override fun save(cuisine: Cuisine): Cuisine {
+        return manager.merge(cuisine)
+    }
 
     @Transactional
     override fun remove(cuisineId: Long) {

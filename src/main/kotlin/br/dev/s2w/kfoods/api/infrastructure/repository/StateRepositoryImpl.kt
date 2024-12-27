@@ -2,6 +2,7 @@ package br.dev.s2w.kfoods.api.infrastructure.repository
 
 import br.dev.s2w.kfoods.api.domain.model.State
 import br.dev.s2w.kfoods.api.domain.repository.StateRepository
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
@@ -17,15 +18,19 @@ class StateRepositoryImpl : StateRepository {
         .createQuery("from State", State::class.java)
         .resultList
 
-    override fun search(id: Long): State =
-        manager.find(State::class.java, id)
+    override fun search(stateId: Long?): State? =
+        manager.find(State::class.java, stateId)
 
     @Transactional
     override fun save(state: State): State =
         manager.merge(state)
 
     @Transactional
-    override fun remove(state: State) =
-        manager.remove(search(state.id!!))
+    override fun remove(stateId: Long) {
+        val state = search(stateId)
+            ?: throw EmptyResultDataAccessException(1)
+
+        manager.remove(state)
+    }
 
 }
