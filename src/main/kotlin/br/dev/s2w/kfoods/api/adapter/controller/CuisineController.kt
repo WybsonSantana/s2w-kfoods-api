@@ -19,11 +19,11 @@ class CuisineController(
 
     @GetMapping
     fun list(): List<Cuisine> =
-        cuisineRepository.list()
+        cuisineRepository.findAll()
 
     @GetMapping("/{cuisineId}")
     fun search(@PathVariable cuisineId: Long): ResponseEntity<Cuisine> {
-        val cuisine = cuisineRepository.search(cuisineId)
+        val cuisine = cuisineRepository.findById(cuisineId).orElse(null)
             ?: return ResponseEntity.notFound().build()
 
         return ResponseEntity.ok(cuisine)
@@ -36,7 +36,7 @@ class CuisineController(
 
     @PutMapping("/{cuisineId}")
     fun update(@PathVariable cuisineId: Long, @RequestBody cuisine: Cuisine): ResponseEntity<Cuisine> {
-        val currentCuisine = cuisineRepository.search(cuisineId)
+        val currentCuisine = cuisineRepository.findById(cuisineId).orElse(null)
             ?: return ResponseEntity.notFound().build()
 
         BeanUtils.copyProperties(cuisine, currentCuisine, "id")

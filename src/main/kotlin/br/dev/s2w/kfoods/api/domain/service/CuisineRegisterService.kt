@@ -19,7 +19,7 @@ class CuisineRegisterService(
 
     fun remove(cuisineId: Long) {
         try {
-            cuisineRepository.remove(cuisineId)
+            cuisineRepository.deleteById(cuisineId)
         } catch (e: EmptyResultDataAccessException) {
             throw EntityNotFoundException("There is no cuisine registration with the code $cuisineId")
         } catch (e: DataIntegrityViolationException) {

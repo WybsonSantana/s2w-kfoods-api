@@ -14,7 +14,7 @@ class RestaurantRegisterService(
 
     fun save(restaurant: Restaurant): Restaurant {
         val cuisineId = restaurant.cuisine?.id
-        val currentCuisine = cuisineRepository.search(cuisineId)
+        val currentCuisine = cuisineRepository.findById(cuisineId!!).orElse(null)
             ?: throw EntityNotFoundException("There is no cuisine registration with the code $cuisineId")
 
         val currentRestaurant = restaurant.copy(cuisine = currentCuisine)
