@@ -19,12 +19,12 @@ class CityController(
 
     @GetMapping
     fun list(): List<City> {
-        return cityRepository.list()
+        return cityRepository.findAll()
     }
 
     @GetMapping("/{cityId}")
-    fun search(@PathVariable cityId: Long?): ResponseEntity<City> {
-        val city = cityRepository.search(cityId)
+    fun search(@PathVariable cityId: Long): ResponseEntity<City> {
+        val city = cityRepository.findById(cityId).orElse(null)
             ?: return ResponseEntity.notFound().build()
 
         return ResponseEntity.ok(city)
@@ -44,7 +44,7 @@ class CityController(
     @PutMapping("/{cityId}")
     fun update(@PathVariable cityId: Long, @RequestBody city: City): ResponseEntity<Any> {
         try {
-            val currentCity = cityRepository.search(cityId)
+            val currentCity = cityRepository.findById(cityId).orElse(null)
                 ?: return ResponseEntity.notFound().build()
 
             BeanUtils.copyProperties(city, currentCity, "id")

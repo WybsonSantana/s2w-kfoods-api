@@ -17,7 +17,7 @@ class CityRegisterService(
 
     fun save(city: City): City {
         val stateId = city.state?.id
-        val currentState = stateRepository.search(stateId)
+        val currentState = stateRepository.findById(stateId!!).orElse(null)
             ?: throw EntityNotFoundException("There is no state registration with the code $stateId")
 
         val currentCity = city.copy(state = currentState)
@@ -27,7 +27,7 @@ class CityRegisterService(
 
     fun remove(cityId: Long) {
         try {
-            cityRepository.remove(cityId)
+            cityRepository.deleteById(cityId)
         } catch (e: EmptyResultDataAccessException) {
             throw EntityNotFoundException("There is no city registration with the code $cityId")
         } catch (e: DataIntegrityViolationException) {

@@ -18,7 +18,7 @@ class StateRegisterService(
 
     fun remove(stateId: Long) {
         try {
-            stateRepository.remove(stateId)
+            stateRepository.deleteById(stateId)
         } catch (e: EmptyResultDataAccessException) {
             throw EntityNotFoundException("There is no state registration with the code $stateId")
         } catch (e: DataIntegrityViolationException) {

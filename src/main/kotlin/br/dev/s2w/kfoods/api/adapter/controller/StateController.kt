@@ -19,12 +19,12 @@ class StateController(
 
     @GetMapping
     fun list(): List<State> {
-        return stateRepository.list()
+        return stateRepository.findAll()
     }
 
     @GetMapping("/{stateId}")
     fun search(@PathVariable stateId: Long): ResponseEntity<State> {
-        val state = stateRepository.search(stateId)
+        val state = stateRepository.findById(stateId).orElse(null)
             ?: return ResponseEntity.notFound().build()
 
         return ResponseEntity.ok(state)
@@ -39,7 +39,7 @@ class StateController(
 
     @PutMapping("/{stateId}")
     fun update(@PathVariable stateId: Long, @RequestBody state: State): ResponseEntity<State> {
-        val currentState = stateRepository.search(stateId)
+        val currentState = stateRepository.findById(stateId).orElse(null)
             ?: return ResponseEntity.notFound().build()
 
         BeanUtils.copyProperties(state, currentState, "id")

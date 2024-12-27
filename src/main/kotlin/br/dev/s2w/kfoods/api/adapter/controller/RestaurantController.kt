@@ -20,11 +20,11 @@ class RestaurantController(
 
     @GetMapping
     fun list(): List<Restaurant> =
-        restaurantRepository.list()
+        restaurantRepository.findAll()
 
     @GetMapping("/{restaurantId}")
     fun search(@PathVariable restaurantId: Long): ResponseEntity<Restaurant> {
-        val restaurant = restaurantRepository.search(restaurantId)
+        val restaurant = restaurantRepository.findById(restaurantId).orElse(null)
             ?: return ResponseEntity.notFound().build()
 
         return ResponseEntity.ok(restaurant)
@@ -44,7 +44,7 @@ class RestaurantController(
     @PutMapping("/{restaurantId}")
     fun update(@PathVariable restaurantId: Long, @RequestBody restaurant: Restaurant): ResponseEntity<Any> {
         try {
-            val currentRestaurant = restaurantRepository.search(restaurantId)
+            val currentRestaurant = restaurantRepository.findById(restaurantId).orElse(null)
                 ?: return ResponseEntity.notFound().build()
 
             BeanUtils.copyProperties(restaurant, currentRestaurant, "id")
@@ -59,7 +59,7 @@ class RestaurantController(
 
     @PatchMapping("/{restaurantId}")
     fun patch(@PathVariable restaurantId: Long, @RequestBody fields: Map<String, Any>): ResponseEntity<Any> {
-        val currentRestaurant = restaurantRepository.search(restaurantId)
+        val currentRestaurant = restaurantRepository.findById(restaurantId).orElse(null)
             ?: return ResponseEntity.notFound().build()
 
         merge(fields, currentRestaurant)

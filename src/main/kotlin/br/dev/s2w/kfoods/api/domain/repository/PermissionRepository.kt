@@ -1,10 +1,8 @@
 package br.dev.s2w.kfoods.api.domain.repository
 
 import br.dev.s2w.kfoods.api.domain.model.Permission
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
-interface PermissionRepository {
-    fun list(): List<Permission>
-    fun search(id: Long): Permission
-    fun save(permission: Permission): Permission
-    fun remove(permission: Permission)
-}
+@Repository
+interface PermissionRepository : JpaRepository<Permission, Long>
