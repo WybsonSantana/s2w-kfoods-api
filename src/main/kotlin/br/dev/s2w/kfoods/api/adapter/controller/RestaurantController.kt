@@ -54,4 +54,23 @@ class RestaurantController(
             return ResponseEntity.badRequest().body(e.message)
         }
     }
+
+    @PatchMapping("/{restaurantId}")
+    fun patch(@PathVariable restaurantId: Long, @RequestBody fields: Map<String, Any>): ResponseEntity<Any> {
+        val currentRestaurant = restaurantRepository.search(restaurantId)
+            ?: return ResponseEntity.notFound().build()
+
+        merge(fields, currentRestaurant)
+
+        return update(restaurantId, currentRestaurant)
+
+    }
+
+
+    private fun merge(fields: Map<String, Any>, targetRestaurant: Restaurant) {
+        fields.forEach { (key, value) ->
+            println("$key = $value")
+        }
+    }
+
 }
