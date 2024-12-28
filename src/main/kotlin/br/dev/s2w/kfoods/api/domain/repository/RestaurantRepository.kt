@@ -9,7 +9,7 @@ import java.math.BigDecimal
 @Repository
 interface RestaurantRepository : JpaRepository<Restaurant, Long> {
     fun findByDeliveryFeeBetween(initialFee: BigDecimal, finalFee: BigDecimal): List<Restaurant>
-    @Query("from Restaurant where name like %:name% and cuisine.id = :cuisineId")
+    //@Query("from Restaurant where name like %:name% and cuisine.id = :cuisineId")
     fun queryByName(name: String, cuisineId: Long): List<Restaurant>
     //fun findByNameContainingAndCuisineId(name: String, cuisineId: Long): List<Restaurant>
     fun getFirstRestaurantByNameContaining(name: String): Restaurant?
