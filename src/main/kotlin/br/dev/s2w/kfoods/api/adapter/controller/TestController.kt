@@ -50,9 +50,9 @@ class TestController(
 
     @GetMapping("/restaurants/by-name-and-delivery-fee")
     fun findRestaurantsByNamAndDeliveryFee(
-        @RequestParam name: String,
-        @RequestParam initialFee: BigDecimal,
-        @RequestParam finalFee: BigDecimal
+        @RequestParam(required = false) name: String?,
+        @RequestParam(required = false) initialFee: BigDecimal?,
+        @RequestParam(required = false) finalFee: BigDecimal?
     ): List<Restaurant> =
         restaurantRepository.find(name, initialFee, finalFee)
 
