@@ -48,6 +48,14 @@ class TestController(
     fun findTopTwoRestaurantsByName(@RequestParam name: String): List<Restaurant> =
         restaurantRepository.queryTop2ByNameContaining(name)
 
+    @GetMapping("/restaurants/by-name-and-delivery-fee")
+    fun findRestaurantsByNamAndDeliveryFee(
+        @RequestParam name: String,
+        @RequestParam initialFee: BigDecimal,
+        @RequestParam finalFee: BigDecimal
+    ): List<Restaurant> =
+        restaurantRepository.find(name, initialFee, finalFee)
+
     @GetMapping("/restaurants/count-by-cuisine")
     fun countRestaurantsByCuisine(@RequestParam cuisineId: Long): Int =
         restaurantRepository.countByCuisineId(cuisineId)
