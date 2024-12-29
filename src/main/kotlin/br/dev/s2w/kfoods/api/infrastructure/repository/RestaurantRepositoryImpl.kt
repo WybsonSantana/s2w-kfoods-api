@@ -16,12 +16,17 @@ class RestaurantRepositoryImpl : RestaurantRepositoryQueries {
     override fun find(name: String?, initialFee: BigDecimal?, finalFee: BigDecimal?): List<Restaurant> {
         val builder = manager.criteriaBuilder
         val criteria = builder.createQuery(Restaurant::class.java)
+        val root = criteria.from(Restaurant::class.java)
 
-        criteria.from(Restaurant::class.java)
+        val namePredicate = builder.like(root.get("name"), "%$name%")
+        val initialFeePredicate = builder.greaterThanOrEqualTo(root.get("deliveryFee"), initialFee)
+        val finalFeePredicate = builder.lessThanOrEqualTo(root.get("deliveryFee"), finalFee)
 
-        val query = manager.createQuery(criteria)
+        criteria.where(namePredicate, initialFeePredicate, finalFeePredicate)
 
-        return query.resultList
+        manager.createQuery(criteria).also {
+            return it.resultList
+        }
     }
 
 }
