@@ -1,7 +1,11 @@
 package br.dev.s2w.kfoods.api.infrastructure.repository
 
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
+import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepository
 import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepositoryQueries
+import br.dev.s2w.kfoods.api.infrastructure.repository.specification.RestaurantSpecs.withFreeDelivery
+import br.dev.s2w.kfoods.api.infrastructure.repository.specification.RestaurantSpecs.withSimilarName
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Repository
 import org.springframework.util.StringUtils
 import java.math.BigDecimal
@@ -10,7 +14,10 @@ import javax.persistence.PersistenceContext
 import javax.persistence.criteria.Predicate
 
 @Repository
-class RestaurantRepositoryImpl : RestaurantRepositoryQueries {
+class RestaurantRepositoryImpl(
+    @Lazy
+    private val restaurantRepository: RestaurantRepository
+) : RestaurantRepositoryQueries {
 
     @PersistenceContext
     private lateinit var manager: EntityManager
@@ -38,4 +45,7 @@ class RestaurantRepositoryImpl : RestaurantRepositoryQueries {
         }
     }
 
+    override fun findWithFreeDelivery(name: String): List<Restaurant> {
+        return restaurantRepository.findAll(withFreeDelivery().and(withSimilarName(name)))
+    }
 }
