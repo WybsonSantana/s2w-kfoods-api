@@ -3,9 +3,11 @@ package br.dev.s2w.kfoods.api.infrastructure.repository
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
 import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepositoryQueries
 import org.springframework.stereotype.Repository
+import org.springframework.util.StringUtils
 import java.math.BigDecimal
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
+import javax.persistence.criteria.Predicate
 
 @Repository
 class RestaurantRepositoryImpl : RestaurantRepositoryQueries {
@@ -18,11 +20,18 @@ class RestaurantRepositoryImpl : RestaurantRepositoryQueries {
         val criteria = builder.createQuery(Restaurant::class.java)
         val root = criteria.from(Restaurant::class.java)
 
-        val namePredicate = builder.like(root.get("name"), "%$name%")
-        val initialFeePredicate = builder.greaterThanOrEqualTo(root.get("deliveryFee"), initialFee)
-        val finalFeePredicate = builder.lessThanOrEqualTo(root.get("deliveryFee"), finalFee)
+        val predicates = ArrayList<Predicate>()
 
-        criteria.where(namePredicate, initialFeePredicate, finalFeePredicate)
+        if (StringUtils.hasText(name))
+            predicates.add(builder.like(root.get("name"), "%$name%"))
+
+        if (initialFee != null)
+            predicates.add(builder.greaterThanOrEqualTo(root.get("deliveryFee"), initialFee))
+
+        if (finalFee != null)
+            predicates.add(builder.lessThanOrEqualTo(root.get("deliveryFee"), finalFee))
+
+        criteria.where(*predicates.toTypedArray<Predicate>())
 
         manager.createQuery(criteria).also {
             return it.resultList
