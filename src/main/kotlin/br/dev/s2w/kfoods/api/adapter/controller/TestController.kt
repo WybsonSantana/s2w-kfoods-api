@@ -4,6 +4,8 @@ import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
 import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepository
+import br.dev.s2w.kfoods.api.infrastructure.repository.specification.RestaurantWithFreeDeliverySpec
+import br.dev.s2w.kfoods.api.infrastructure.repository.specification.RestaurantWithSimilarNameSpec
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -59,5 +61,13 @@ class TestController(
     @GetMapping("/restaurants/count-by-cuisine")
     fun countRestaurantsByCuisine(@RequestParam cuisineId: Long): Int =
         restaurantRepository.countByCuisineId(cuisineId)
+
+    @GetMapping("/restaurants/with-free-delivery")
+    fun findRestaurantsWithFreeDelivery(@RequestParam(required = false) name: String): List<Restaurant> {
+        val withFreeDelivery = RestaurantWithFreeDeliverySpec()
+        val withSimilarName = RestaurantWithSimilarNameSpec(name)
+
+        return restaurantRepository.findAll(withFreeDelivery.and(withSimilarName))
+    }
 
 }
