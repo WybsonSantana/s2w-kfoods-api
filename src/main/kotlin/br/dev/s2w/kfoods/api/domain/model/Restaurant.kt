@@ -17,5 +17,13 @@ data class Restaurant(
 
     @ManyToOne
     @JoinColumn(name = "cuisine_id", nullable = false)
-    var cuisine: Cuisine? = null
+    var cuisine: Cuisine? = null,
+
+    @ManyToMany
+    @JoinTable(
+        name = "restaurant_payment_method",
+        joinColumns = [JoinColumn(name = "restaurant_id")],
+        inverseJoinColumns = [JoinColumn(name = "payment_method_id")]
+    )
+    var paymentMethods: MutableList<PaymentMethod> = mutableListOf()
 )
