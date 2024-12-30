@@ -47,7 +47,7 @@ class RestaurantController(
             val currentRestaurant = restaurantRepository.findById(restaurantId).orElse(null)
                 ?: return ResponseEntity.notFound().build()
 
-            BeanUtils.copyProperties(restaurant, currentRestaurant, "id")
+            BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentMethods")
 
             restaurantRegister.save(currentRestaurant).also {
                 return ResponseEntity.ok(it)

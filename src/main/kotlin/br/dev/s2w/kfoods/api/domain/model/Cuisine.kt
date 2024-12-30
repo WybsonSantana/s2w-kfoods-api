@@ -12,7 +12,7 @@ data class Cuisine(
     @Column(nullable = false)
     var name: String? = null,
 
-    @JsonIgnore
     @OneToMany
+    @JsonIgnore
     var restaurants: MutableList<Restaurant> = mutableListOf()
 )
