@@ -21,6 +21,7 @@ data class Restaurant(
     var cuisine: Cuisine? = null,
 
     @Embedded
+    @JsonIgnore
     var address: Address? = null,
 
     @ManyToMany
