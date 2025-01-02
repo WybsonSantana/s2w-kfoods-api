@@ -1,7 +1,10 @@
 package br.dev.s2w.kfoods.api.domain.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import java.math.BigDecimal
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -23,6 +26,16 @@ data class Restaurant(
     @Embedded
     @JsonIgnore
     var address: Address? = null,
+
+    @CreationTimestamp
+    @Column(nullable = false, columnDefinition = "datetime")
+    @JsonIgnore
+    var registrationDate: LocalDateTime? = null,
+
+    @UpdateTimestamp
+    @Column(nullable = false, columnDefinition = "datetime")
+    @JsonIgnore
+    var lastUpdateDate: LocalDateTime? = null,
 
     @ManyToMany
     @JoinTable(
