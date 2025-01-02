@@ -20,6 +20,9 @@ data class Restaurant(
     @JoinColumn(name = "cuisine_id", nullable = false)
     var cuisine: Cuisine? = null,
 
+    @Embedded
+    var address: Address? = null,
+
     @ManyToMany
     @JoinTable(
         name = "restaurant_payment_method",
