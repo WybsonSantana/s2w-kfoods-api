@@ -1,4 +1,29 @@
-use kfoods;
+set foreign_key_checks = 0;
+
+delete from city;
+delete from cuisine;
+delete from identity;
+delete from identity_role;
+delete from payment_method;
+delete from permission;
+delete from product;
+delete from restaurant;
+delete from restaurant_payment_method;
+delete from role;
+delete from role_permission;
+delete from state;
+
+set foreign_key_checks = 1;
+
+alter table city auto_increment = 1;
+alter table cuisine auto_increment = 1;
+alter table identity auto_increment = 1;
+alter table payment_method auto_increment = 1;
+alter table permission auto_increment = 1;
+alter table product auto_increment = 1;
+alter table restaurant auto_increment = 1;
+alter table role auto_increment = 1;
+alter table state auto_increment = 1;
 
 insert into cuisine(id, name) values(1, 'Tailandesa');
 insert into cuisine(id, name) values(2, 'Indiana');
@@ -21,7 +46,7 @@ insert into city(id, name, state_id) values(7, 'Niquelândia', 4);
 insert into restaurant(id, name, delivery_fee, cuisine_id, registration_date, last_update_date, address_postal_code, address_street, address_number, address_district, address_city_id) values(1, 'Thai Gourmet', 10, 1, utc_timestamp, utc_timestamp, '38400-999', 'Rua João Pinheiro', '1000', 'Centro', 1);
 insert into restaurant(id, name, delivery_fee, cuisine_id, registration_date, last_update_date) values(2, 'Thai Delivery', 9.50, 1, utc_timestamp, utc_timestamp);
 insert into restaurant(id, name, delivery_fee, cuisine_id, registration_date, last_update_date) values(3, 'Tuk Tuk Comida Indiana', 15, 2, utc_timestamp, utc_timestamp);
-insert into restaurant(id, name, delivery_fee, cuisine_id, registration_date, last_update_date) values(4, 'Kotlin Steakhouse', 12, 3, utc_timestamp, utc_timestamp);
+insert into restaurant(id, name, delivery_fee, cuisine_id, registration_date, last_update_date) values(4, 'Java Steakhouse', 12, 3, utc_timestamp, utc_timestamp);
 insert into restaurant(id, name, delivery_fee, cuisine_id, registration_date, last_update_date) values(5, 'Lanchonete do Tio Sam', 11, 4, utc_timestamp, utc_timestamp);
 insert into restaurant(id, name, delivery_fee, cuisine_id, registration_date, last_update_date) values(6, 'Bar da Maria', 6, 4, utc_timestamp, utc_timestamp);
 
