@@ -1,9 +1,6 @@
 package br.dev.s2w.kfoods.api.domain.model
 
-import javax.persistence.Column
-import javax.persistence.Embeddable
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
+import javax.persistence.*
 
 @Embeddable
 data class Address(
@@ -22,7 +19,7 @@ data class Address(
     @Column(name = "address_district")
     var district: String? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_city_id")
     var city: City? = null
 

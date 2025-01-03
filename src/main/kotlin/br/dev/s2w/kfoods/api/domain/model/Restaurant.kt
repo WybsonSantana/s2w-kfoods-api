@@ -1,6 +1,7 @@
 package br.dev.s2w.kfoods.api.domain.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.math.BigDecimal
@@ -19,8 +20,9 @@ data class Restaurant(
     @Column(name = "delivery_fee", nullable = false)
     var deliveryFee: BigDecimal? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cuisine_id", nullable = false)
+    @JsonIgnoreProperties("hibernateLazyInitializer")
     var cuisine: Cuisine? = null,
 
     @Embedded
