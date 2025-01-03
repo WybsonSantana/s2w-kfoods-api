@@ -39,7 +39,7 @@ data class Restaurant(
     @JsonIgnore
     var lastUpdateDate: LocalDateTime? = null,
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "restaurant_payment_method",
         joinColumns = [JoinColumn(name = "restaurant_id")],
