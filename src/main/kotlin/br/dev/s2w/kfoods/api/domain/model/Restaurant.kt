@@ -44,5 +44,9 @@ data class Restaurant(
         inverseJoinColumns = [JoinColumn(name = "payment_method_id")]
     )
     @JsonIgnore
-    var paymentMethods: MutableList<PaymentMethod> = mutableListOf()
+    var paymentMethods: MutableList<PaymentMethod> = mutableListOf(),
+
+    @OneToMany(mappedBy = "restaurant")
+    @JsonIgnore
+    var products: MutableList<Product> = mutableListOf()
 )

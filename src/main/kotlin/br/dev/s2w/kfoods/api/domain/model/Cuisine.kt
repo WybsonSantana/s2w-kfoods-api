@@ -12,7 +12,7 @@ data class Cuisine(
     @Column(nullable = false)
     var name: String? = null,
 
-    @OneToMany
+    @OneToMany(mappedBy = "cuisine")
     @JsonIgnore
     var restaurants: MutableList<Restaurant> = mutableListOf()
 )

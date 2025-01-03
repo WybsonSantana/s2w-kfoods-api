@@ -49,7 +49,7 @@ class RestaurantController(
 
             BeanUtils.copyProperties(
                 restaurant, currentRestaurant,
-                "id", "paymentMethods", "address", "registrationDate"
+                "id", "paymentMethods", "address", "registrationDate", "products"
             )
 
             restaurantRegister.save(currentRestaurant).also {
