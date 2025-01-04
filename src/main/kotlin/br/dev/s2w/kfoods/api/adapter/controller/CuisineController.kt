@@ -1,5 +1,6 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
+import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
 import br.dev.s2w.kfoods.api.domain.service.CuisineRegisterService
@@ -7,6 +8,7 @@ import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("/cuisines")
@@ -57,7 +59,12 @@ class CuisineController(
     @DeleteMapping("/{cuisineId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun remove(@PathVariable cuisineId: Long): Unit {
-        cuisineRegister.remove(cuisineId)
+        try {
+            cuisineRegister.remove(cuisineId)
+        } catch (e: EntityNotFoundException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
+            //throw ServerWebInputException(e.message.toString())
+        }
     }
 
 }
