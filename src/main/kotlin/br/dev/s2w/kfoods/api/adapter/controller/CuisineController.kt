@@ -59,12 +59,7 @@ class CuisineController(
     @DeleteMapping("/{cuisineId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun remove(@PathVariable cuisineId: Long): Unit {
-        try {
             cuisineRegister.remove(cuisineId)
-        } catch (e: EntityNotFoundException) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-            //throw ServerWebInputException(e.message.toString())
-        }
     }
 
 }
