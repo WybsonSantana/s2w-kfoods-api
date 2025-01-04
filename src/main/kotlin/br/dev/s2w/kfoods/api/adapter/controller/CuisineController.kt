@@ -1,7 +1,5 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
-import br.dev.s2w.kfoods.api.domain.exception.EntityInUseException
-import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
 import br.dev.s2w.kfoods.api.domain.service.CuisineRegisterService
@@ -44,16 +42,22 @@ class CuisineController(
         return ResponseEntity.ok(cuisineRegister.save(currentCuisine))
     }
 
+//    @DeleteMapping("/{cuisineId}")
+//    fun remove(@PathVariable cuisineId: Long): ResponseEntity<Cuisine> {
+//        try {
+//            cuisineRegister.remove(cuisineId)
+//            return ResponseEntity.noContent().build()
+//        } catch (e: EntityNotFoundException) {
+//            return ResponseEntity.notFound().build()
+//        } catch (e: EntityInUseException) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).build()
+//        }
+//    }
+
     @DeleteMapping("/{cuisineId}")
-    fun remove(@PathVariable cuisineId: Long): ResponseEntity<Cuisine> {
-        try {
-            cuisineRegister.remove(cuisineId)
-            return ResponseEntity.noContent().build()
-        } catch (e: EntityNotFoundException) {
-            return ResponseEntity.notFound().build()
-        } catch (e: EntityInUseException) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build()
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun remove(@PathVariable cuisineId: Long): Unit {
+        cuisineRegister.remove(cuisineId)
     }
 
 }
