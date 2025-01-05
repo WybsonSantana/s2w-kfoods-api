@@ -13,16 +13,27 @@ class StateRegisterService(
     private val stateRepository: StateRepository
 ) {
 
-    fun save(state: State): State =
-        stateRepository.save(state)
+    private val stateNotFoundMessage = { stateId: Long -> "There is no state registration with the code $stateId" }
+
+    private val stateInUseMessage = { stateId: Long -> "The state with code $stateId cannot be removed because it is in use" }
+
+    fun find(stateId: Long): State {
+        return stateRepository.findById(stateId).orElseThrow {
+            EntityNotFoundException(stateNotFoundMessage(stateId))
+        }
+    }
+
+    fun save(state: State): State {
+        return stateRepository.save(state)
+    }
 
     fun remove(stateId: Long) {
         try {
             stateRepository.deleteById(stateId)
         } catch (e: EmptyResultDataAccessException) {
-            throw EntityNotFoundException("There is no state registration with the code $stateId")
+            throw EntityNotFoundException(stateNotFoundMessage(stateId))
         } catch (e: DataIntegrityViolationException) {
-            throw EntityInUseException("The state with code $stateId cannot be removed because it is in use")
+            throw EntityInUseException(stateInUseMessage(stateId))
         }
     }
 

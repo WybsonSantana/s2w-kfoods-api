@@ -18,10 +18,9 @@ class CuisineRegisterService(
     private val cuisineInUseMessage = { cuisineId: Long -> "The cuisine with code $cuisineId cannot be removed because it is in use" }
 
     fun find(cuisineId: Long): Cuisine {
-        return cuisineRepository.findById(cuisineId)
-            .orElseThrow {
-                EntityNotFoundException(cuisineNotFoundMessage(cuisineId))
-            }
+        return cuisineRepository.findById(cuisineId).orElseThrow {
+            EntityNotFoundException(cuisineNotFoundMessage(cuisineId))
+        }
     }
 
     fun save(cuisine: Cuisine): Cuisine {

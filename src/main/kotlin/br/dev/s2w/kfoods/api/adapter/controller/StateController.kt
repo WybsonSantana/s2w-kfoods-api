@@ -1,13 +1,10 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
-import br.dev.s2w.kfoods.api.domain.exception.EntityInUseException
-import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.State
 import br.dev.s2w.kfoods.api.domain.repository.StateRepository
 import br.dev.s2w.kfoods.api.domain.service.StateRegisterService
 import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -18,47 +15,28 @@ class StateController(
 ) {
 
     @GetMapping
-    fun list(): List<State> {
-        return stateRepository.findAll()
-    }
+    fun list(): List<State> =
+        stateRepository.findAll()
 
     @GetMapping("/{stateId}")
-    fun search(@PathVariable stateId: Long): ResponseEntity<State> {
-        val state = stateRepository.findById(stateId).orElse(null)
-            ?: return ResponseEntity.notFound().build()
-
-        return ResponseEntity.ok(state)
-    }
+    fun find(@PathVariable stateId: Long): State =
+        stateRegister.find(stateId)
 
     @PostMapping
-    fun add(@RequestBody state: State): ResponseEntity<State> {
-        stateRegister.save(state).also {
-            return ResponseEntity.ok(it)
-        }
-    }
+    @ResponseStatus(HttpStatus.CREATED)
+    fun add(@RequestBody state: State): State =
+        stateRegister.save(state)
 
     @PutMapping("/{stateId}")
-    fun update(@PathVariable stateId: Long, @RequestBody state: State): ResponseEntity<State> {
-        val currentState = stateRepository.findById(stateId).orElse(null)
-            ?: return ResponseEntity.notFound().build()
-
-        BeanUtils.copyProperties(state, currentState, "id")
-
-        stateRegister.save(currentState).also {
-            return ResponseEntity.ok(it)
+    fun update(@PathVariable stateId: Long, @RequestBody state: State): State =
+        stateRegister.find(stateId).also {
+            BeanUtils.copyProperties(state, it, "id")
+            stateRegister.save(it)
         }
-    }
 
     @DeleteMapping("/{stateId}")
-    fun remove(@PathVariable stateId: Long): ResponseEntity<Any> {
-        try {
-            stateRegister.remove(stateId)
-            return ResponseEntity.noContent().build()
-        } catch (e: EntityNotFoundException) {
-            return ResponseEntity.notFound().build()
-        } catch (e: EntityInUseException) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.message)
-        }
-    }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun remove(@PathVariable stateId: Long): Unit =
+        stateRegister.remove(stateId)
 
 }

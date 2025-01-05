@@ -19,7 +19,7 @@ class CuisineController(
         cuisineRepository.findAll()
 
     @GetMapping("/{cuisineId}")
-    fun search(@PathVariable cuisineId: Long): Cuisine =
+    fun find(@PathVariable cuisineId: Long): Cuisine =
         cuisineRegister.find(cuisineId)
 
     @PostMapping
