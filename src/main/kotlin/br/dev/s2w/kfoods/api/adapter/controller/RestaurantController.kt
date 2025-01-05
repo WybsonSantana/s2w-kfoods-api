@@ -1,5 +1,7 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
+import br.dev.s2w.kfoods.api.domain.exception.BusinessException
+import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
 import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepository
 import br.dev.s2w.kfoods.api.domain.service.RestaurantRegisterService
@@ -27,7 +29,11 @@ class RestaurantController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun add(@RequestBody restaurant: Restaurant): Restaurant =
-        restaurantRegister.save(restaurant)
+        try {
+            restaurantRegister.save(restaurant)
+        } catch (e: EntityNotFoundException) {
+            throw BusinessException(e.message)
+        }
 
     @PutMapping("/{restaurantId}")
     fun update(@PathVariable restaurantId: Long, @RequestBody restaurant: Restaurant): Restaurant =
@@ -37,7 +43,11 @@ class RestaurantController(
                 "id", "paymentMethods", "address", "registrationDate", "products"
             )
 
-            restaurantRegister.save(it)
+            try {
+                restaurantRegister.save(it)
+            } catch (e: EntityNotFoundException) {
+                throw BusinessException(e.message)
+            }
         }
 
     @PatchMapping("/{restaurantId}")
