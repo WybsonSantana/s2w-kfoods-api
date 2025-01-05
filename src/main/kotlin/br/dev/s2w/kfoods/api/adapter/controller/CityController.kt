@@ -1,7 +1,7 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
 import br.dev.s2w.kfoods.api.domain.exception.BusinessException
-import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
+import br.dev.s2w.kfoods.api.domain.exception.StateNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.City
 import br.dev.s2w.kfoods.api.domain.repository.CityRepository
 import br.dev.s2w.kfoods.api.domain.service.CityRegisterService
@@ -29,20 +29,20 @@ class CityController(
     fun add(@RequestBody city: City) =
         try {
             cityRegister.save(city)
-        } catch (e: EntityNotFoundException) {
-            throw BusinessException(e.message)
+        } catch (e: StateNotFoundException) {
+            throw BusinessException(e.message, e)
         }
 
     @PutMapping("/{cityId}")
     fun update(@PathVariable cityId: Long, @RequestBody city: City) =
-        cityRegister.find(cityId).also {
-            BeanUtils.copyProperties(city, it, "id")
+        try {
+            cityRegister.find(cityId).also {
+                BeanUtils.copyProperties(city, it, "id")
 
-            try {
                 cityRegister.save(it)
-            } catch (e: EntityNotFoundException) {
-                throw BusinessException(e.message)
             }
+        } catch (e: StateNotFoundException) {
+            throw BusinessException(e.message, e)
         }
 
     @DeleteMapping("/{cityId}")
