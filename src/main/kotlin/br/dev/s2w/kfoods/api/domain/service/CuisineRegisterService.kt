@@ -13,6 +13,17 @@ class CuisineRegisterService(
     private val cuisineRepository: CuisineRepository
 ) {
 
+    private val cuisineNotFoundMessage = { cuisineId: Long -> "There is no cuisine registration with the code $cuisineId" }
+
+    private val cuisineInUseMessage = { cuisineId: Long -> "The cuisine with code $cuisineId cannot be removed because it is in use" }
+
+    fun find(cuisineId: Long): Cuisine {
+        return cuisineRepository.findById(cuisineId)
+            .orElseThrow {
+                EntityNotFoundException(cuisineNotFoundMessage(cuisineId))
+            }
+    }
+
     fun save(cuisine: Cuisine): Cuisine {
         return cuisineRepository.save(cuisine)
     }
@@ -21,9 +32,10 @@ class CuisineRegisterService(
         try {
             cuisineRepository.deleteById(cuisineId)
         } catch (e: EmptyResultDataAccessException) {
-            throw EntityNotFoundException("There is no cuisine registration with the code $cuisineId")
+            throw EntityNotFoundException(cuisineNotFoundMessage(cuisineId))
         } catch (e: DataIntegrityViolationException) {
-            throw EntityInUseException("The cuisine with code $cuisineId cannot be removed because it is in use")
+            throw EntityInUseException(cuisineInUseMessage(cuisineId))
         }
     }
+
 }
