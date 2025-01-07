@@ -1,6 +1,6 @@
 package br.dev.s2w.kfoods.api.domain.service
 
-import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
+import br.dev.s2w.kfoods.api.domain.exception.RestaurantNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
 import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepository
 import org.springframework.stereotype.Service
@@ -11,11 +11,9 @@ class RestaurantRegisterService(
     private val restaurantRepository: RestaurantRepository
 ) {
 
-    private val restaurantNotFoundMessage = { restaurantId: Long -> "There is no restaurant registration with the code $restaurantId" }
-
     fun find(restaurantId: Long): Restaurant {
         return restaurantRepository.findById(restaurantId).orElseThrow {
-            EntityNotFoundException(restaurantNotFoundMessage(restaurantId))
+            RestaurantNotFoundException(restaurantId)
         }
     }
 

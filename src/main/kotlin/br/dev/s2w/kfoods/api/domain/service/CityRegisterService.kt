@@ -1,7 +1,7 @@
 package br.dev.s2w.kfoods.api.domain.service
 
+import br.dev.s2w.kfoods.api.domain.exception.CityNotFoundException
 import br.dev.s2w.kfoods.api.domain.exception.EntityInUseException
-import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.City
 import br.dev.s2w.kfoods.api.domain.repository.CityRepository
 import org.springframework.dao.DataIntegrityViolationException
@@ -14,13 +14,11 @@ class CityRegisterService(
     private val stateRegister: StateRegisterService
 ) {
 
-    private val cityNotFoundMessage = { cityId: Long -> "There is no city registration with the code $cityId" }
-
     private val cityInUseMessage = { cityId: Long -> "The city with code $cityId cannot be removed because it is in use" }
 
     fun find(cityId: Long): City {
         return cityRepository.findById(cityId).orElseThrow {
-            EntityNotFoundException(cityNotFoundMessage(cityId))
+            CityNotFoundException(cityId)
         }
     }
 
@@ -37,7 +35,7 @@ class CityRegisterService(
         try {
             cityRepository.deleteById(cityId)
         } catch (e: EmptyResultDataAccessException) {
-            throw EntityNotFoundException(cityNotFoundMessage(cityId))
+            throw CityNotFoundException(cityId)
         } catch (e: DataIntegrityViolationException) {
             throw EntityInUseException(cityInUseMessage(cityId))
         }

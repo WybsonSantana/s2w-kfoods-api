@@ -1,7 +1,7 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
 import br.dev.s2w.kfoods.api.domain.exception.BusinessException
-import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
+import br.dev.s2w.kfoods.api.domain.exception.CuisineNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
 import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepository
 import br.dev.s2w.kfoods.api.domain.service.RestaurantRegisterService
@@ -31,23 +31,23 @@ class RestaurantController(
     fun add(@RequestBody restaurant: Restaurant): Restaurant =
         try {
             restaurantRegister.save(restaurant)
-        } catch (e: EntityNotFoundException) {
-            throw BusinessException(e.message)
+        } catch (e: CuisineNotFoundException) {
+            throw BusinessException(e.message, e)
         }
 
     @PutMapping("/{restaurantId}")
     fun update(@PathVariable restaurantId: Long, @RequestBody restaurant: Restaurant): Restaurant =
-        restaurantRegister.find(restaurantId).also {
-            BeanUtils.copyProperties(
-                restaurant, it,
-                "id", "paymentMethods", "address", "registrationDate", "products"
-            )
+        try {
+            restaurantRegister.find(restaurantId).also {
+                BeanUtils.copyProperties(
+                    restaurant, it,
+                    "id", "paymentMethods", "address", "registrationDate", "products"
+                )
 
-            try {
                 restaurantRegister.save(it)
-            } catch (e: EntityNotFoundException) {
-                throw BusinessException(e.message)
             }
+        } catch (e: CuisineNotFoundException) {
+            throw BusinessException(e.message, e)
         }
 
     @PatchMapping("/{restaurantId}")
