@@ -54,24 +54,4 @@ class CityController(
     fun remove(@PathVariable cityId: Long): Unit =
         cityRegister.remove(cityId)
 
-    @ExceptionHandler(BusinessException::class)
-    fun handlerBusinessException(e: BusinessException): ResponseEntity<Any> {
-        val problem = Problem(
-            timestamp = LocalDateTime.now(),
-            message = e.message.toString()
-        )
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem)
-    }
-
-    @ExceptionHandler(EntityNotFoundException::class)
-    fun handlerEntityNotFoundException(e: EntityNotFoundException): ResponseEntity<Any> {
-        val problem = Problem(
-            timestamp = LocalDateTime.now(),
-            message = e.message.toString()
-        )
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem)
-    }
-
 }
