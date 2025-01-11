@@ -6,6 +6,7 @@ import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
@@ -28,6 +29,25 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         }
 
         return super.handleExceptionInternal(e, problem, headers, status, request)
+    }
+
+    override fun handleHttpMessageNotReadable(
+        e: HttpMessageNotReadableException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        val problemType = ProblemType.MESSAGE_NOT_READABLE
+        val detail = "The request payload is invalid. Check syntax error!"
+
+        val problem = Problem(
+            status = status.value(),
+            type = problemType.uri,
+            title = problemType.title,
+            detail = detail
+        )
+
+        return handleExceptionInternal(e, problem, headers, status, request)
     }
 
     @ExceptionHandler(BusinessException::class)
