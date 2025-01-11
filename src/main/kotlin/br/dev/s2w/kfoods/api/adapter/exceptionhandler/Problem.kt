@@ -1,8 +1,11 @@
 package br.dev.s2w.kfoods.api.adapter.exceptionhandler
 
-import java.time.LocalDateTime
+import com.fasterxml.jackson.annotation.JsonInclude
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class Problem(
-    val timestamp: LocalDateTime,
-    val message: String
+    val status: Int? = null,
+    val type: String? = null,
+    val title: String? = null,
+    val detail: String? = null
 )

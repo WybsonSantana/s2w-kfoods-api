@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import java.time.LocalDateTime
 
 @ControllerAdvice
 class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
@@ -22,18 +21,10 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatus,
         request: WebRequest
     ): ResponseEntity<Any> {
-        lateinit var problem: Problem
-
-        if (body == null) {
-            problem = Problem(
-                timestamp = LocalDateTime.now(),
-                message = status.reasonPhrase
-            )
-        } else if (body is String) {
-            problem = Problem(
-                timestamp = LocalDateTime.now(),
-                message = body
-            )
+        val problem = when (body) {
+            null -> Problem(status = status.value(), title = status.reasonPhrase)
+            is String -> Problem(status = status.value(), title = body)
+            else -> body as Problem
         }
 
         return super.handleExceptionInternal(e, problem, headers, status, request)
@@ -59,9 +50,17 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(EntityNotFoundException::class)
     fun handleEntityNotFoundException(e: EntityNotFoundException, request: WebRequest): ResponseEntity<Any> {
-        val problem = e.message
         val headers = HttpHeaders()
         val status = HttpStatus.NOT_FOUND
+        val problemType = ProblemType.ENTITY_NOT_FOUND
+        val detail = e.message
+
+        val problem = Problem(
+            status = status.value(),
+            type = problemType.uri,
+            title = problemType.title,
+            detail = detail
+        )
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
