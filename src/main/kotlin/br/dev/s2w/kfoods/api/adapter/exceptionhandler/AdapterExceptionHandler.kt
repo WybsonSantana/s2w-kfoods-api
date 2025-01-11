@@ -3,6 +3,8 @@ package br.dev.s2w.kfoods.api.adapter.exceptionhandler
 import br.dev.s2w.kfoods.api.domain.exception.BusinessException
 import br.dev.s2w.kfoods.api.domain.exception.EntityInUseException
 import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
+import com.fasterxml.jackson.databind.exc.InvalidFormatException
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -37,6 +39,12 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatus,
         request: WebRequest
     ): ResponseEntity<Any> {
+        val rootCause = ExceptionUtils.getRootCause(e)
+
+        if (rootCause is InvalidFormatException) {
+            return handleInvalidFormatException(rootCause, headers, status, request)
+        }
+
         val problemType = ProblemType.MESSAGE_NOT_READABLE
         val detail = "The request payload is invalid. Check syntax error!"
 
@@ -90,6 +98,27 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val status = HttpStatus.NOT_FOUND
         val problemType = ProblemType.ENTITY_NOT_FOUND
         val detail = e.message
+
+        val problem = Problem(
+            status = status.value(),
+            type = problemType.uri,
+            title = problemType.title,
+            detail = detail
+        )
+
+        return handleExceptionInternal(e, problem, headers, status, request)
+    }
+
+    private fun handleInvalidFormatException(
+        e: InvalidFormatException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        val path = e.path.joinToString(".") { it.fieldName }
+        val problemType = ProblemType.MESSAGE_NOT_READABLE
+        val detail = "Property '$path' has been assigned the value '${e.value}', " +
+                "which is of an invalid type. Correct and enter a value compatible with type ${e.targetType.simpleName}."
 
         val problem = Problem(
             status = status.value(),
