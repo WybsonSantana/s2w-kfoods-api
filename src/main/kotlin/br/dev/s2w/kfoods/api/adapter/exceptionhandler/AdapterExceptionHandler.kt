@@ -32,18 +32,34 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(BusinessException::class)
     fun handleBusinessException(e: BusinessException, request: WebRequest): ResponseEntity<Any> {
-        val problem = e.message
         val headers = HttpHeaders()
         val status = HttpStatus.BAD_REQUEST
+        val problemType = ProblemType.BUSINESS_ERROR
+        val detail = e.message
+
+        val problem = Problem(
+            status = status.value(),
+            type = problemType.uri,
+            title = problemType.title,
+            detail = detail
+        )
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
 
     @ExceptionHandler(EntityInUseException::class)
     fun handleEntityInUseException(e: EntityInUseException, request: WebRequest): ResponseEntity<Any> {
-        val problem = e.message
         val headers = HttpHeaders()
         val status = HttpStatus.CONFLICT
+        val problemType = ProblemType.ENTITY_IN_USE
+        val detail = e.message
+
+        val problem = Problem(
+            status = status.value(),
+            type = problemType.uri,
+            title = problemType.title,
+            detail = detail
+        )
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }

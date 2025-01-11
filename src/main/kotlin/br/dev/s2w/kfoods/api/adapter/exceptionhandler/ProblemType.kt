@@ -5,6 +5,8 @@ enum class ProblemType(
     val title: String
 ) {
 
+    BUSINESS_ERROR("/business-error", "Business rule violation"),
+    ENTITY_IN_USE("/entity-in-use", "Entity in use"),
     ENTITY_NOT_FOUND("/entity-not-found", "Entity not found");
 
     val uri: String
