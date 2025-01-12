@@ -21,6 +21,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
 
+    private val genericUserMessage = "An unexpected internal system error has occurred. " +
+            "Please try again and if the problem persists, contact your system administrator."
+
     override fun handleExceptionInternal(
         e: Exception,
         body: Any?,
@@ -180,7 +183,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
             status = status.value(),
             type = problemType.uri,
             title = problemType.title,
-            detail = detail
+            detail = detail,
+            userMessage = genericUserMessage
         )
 
         return handleExceptionInternal(e, problem, headers, status, request)
@@ -201,7 +205,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
             status = status.value(),
             type = problemType.uri,
             title = problemType.title,
-            detail = detail
+            detail = detail,
+            userMessage = genericUserMessage
         )
 
         return handleExceptionInternal(e, problem, headers, status, request)

@@ -7,5 +7,6 @@ data class Problem(
     val status: Int? = null,
     val type: String? = null,
     val title: String? = null,
-    val detail: String? = null
+    val detail: String? = null,
+    val userMessage: String? = null
 )
