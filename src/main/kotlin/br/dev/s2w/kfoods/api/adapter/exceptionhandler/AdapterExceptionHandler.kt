@@ -32,8 +32,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         request: WebRequest
     ): ResponseEntity<Any> {
         val problem = when (body) {
-            null -> Problem(status = status.value(), title = status.reasonPhrase)
-            is String -> Problem(status = status.value(), title = body)
+            null -> Problem(status = status.value(), title = status.reasonPhrase, userMessage = genericUserMessage)
+            is String -> Problem(status = status.value(), title = body, userMessage = genericUserMessage)
             else -> body as Problem
         }
 
@@ -61,7 +61,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
             status = status.value(),
             type = problemType.uri,
             title = problemType.title,
-            detail = detail
+            detail = detail,
+            userMessage = genericUserMessage
         )
 
         return handleExceptionInternal(e, problem, headers, status, request)
@@ -93,7 +94,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
             status = status.value(),
             type = problemType.uri,
             title = problemType.title,
-            detail = detail
+            detail = detail,
+            userMessage = genericUserMessage
         )
 
         return handleExceptionInternal(e, problem, headers, status, request)
@@ -110,7 +112,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
             status = status.value(),
             type = problemType.uri,
             title = problemType.title,
-            detail = detail
+            detail = detail,
+            userMessage = genericUserMessage
         )
 
         return handleExceptionInternal(e, problem, headers, status, request)
@@ -127,7 +130,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
             status = status.value(),
             type = problemType.uri,
             title = problemType.title,
-            detail = detail
+            detail = detail,
+            userMessage = genericUserMessage
         )
 
         return handleExceptionInternal(e, problem, headers, status, request)
@@ -144,7 +148,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
             status = status.value(),
             type = problemType.uri,
             title = problemType.title,
-            detail = detail
+            detail = detail,
+            userMessage = genericUserMessage
         )
 
         return handleExceptionInternal(e, problem, headers, status, request)
@@ -162,7 +167,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
             status = status.value(),
             type = problemType.uri,
             title = problemType.title,
-            detail = detail
+            detail = detail,
+            userMessage = genericUserMessage
         )
 
         return handleExceptionInternal(e, problem, headers, status, request)
@@ -226,7 +232,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
             status = status.value(),
             type = problemType.uri,
             title = problemType.title,
-            detail = detail
+            detail = detail,
+            userMessage = genericUserMessage
         )
 
         return handleExceptionInternal(e, problem, headers, status, request)
