@@ -6,6 +6,7 @@ import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.fasterxml.jackson.databind.exc.PropertyBindingException
 import org.apache.commons.lang3.exception.ExceptionUtils
+import org.springframework.beans.TypeMismatchException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,6 +14,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @ControllerAdvice
@@ -43,9 +45,9 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val rootCause = ExceptionUtils.getRootCause(e)
 
         if (rootCause is InvalidFormatException) {
-            return handleInvalidFormatException(rootCause, headers, status, request)
+            return handleInvalidFormat(rootCause, headers, status, request)
         } else if (rootCause is PropertyBindingException) {
-            return handlePropertyBindingException(rootCause, headers, status, request)
+            return handlePropertyBinding(rootCause, headers, status, request)
         }
 
         val problemType = ProblemType.MESSAGE_NOT_READABLE
@@ -61,8 +63,21 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         return handleExceptionInternal(e, problem, headers, status, request)
     }
 
+    override fun handleTypeMismatch(
+        e: TypeMismatchException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        if (e is MethodArgumentTypeMismatchException) {
+            return handleMethodArgumentTypeMismatch(e, headers, status, request)
+        }
+
+        return super.handleTypeMismatch(e, headers, status, request)
+    }
+
     @ExceptionHandler(BusinessException::class)
-    fun handleBusinessException(e: BusinessException, request: WebRequest): ResponseEntity<Any> {
+    fun handleBusiness(e: BusinessException, request: WebRequest): ResponseEntity<Any> {
         val headers = HttpHeaders()
         val status = HttpStatus.BAD_REQUEST
         val problemType = ProblemType.BUSINESS_ERROR
@@ -79,7 +94,7 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(EntityInUseException::class)
-    fun handleEntityInUseException(e: EntityInUseException, request: WebRequest): ResponseEntity<Any> {
+    fun handleEntityInUse(e: EntityInUseException, request: WebRequest): ResponseEntity<Any> {
         val headers = HttpHeaders()
         val status = HttpStatus.CONFLICT
         val problemType = ProblemType.ENTITY_IN_USE
@@ -96,7 +111,7 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(EntityNotFoundException::class)
-    fun handleEntityNotFoundException(e: EntityNotFoundException, request: WebRequest): ResponseEntity<Any> {
+    fun handleEntityNotFound(e: EntityNotFoundException, request: WebRequest): ResponseEntity<Any> {
         val headers = HttpHeaders()
         val status = HttpStatus.NOT_FOUND
         val problemType = ProblemType.ENTITY_NOT_FOUND
@@ -112,7 +127,7 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         return handleExceptionInternal(e, problem, headers, status, request)
     }
 
-    private fun handleInvalidFormatException(
+    private fun handleInvalidFormat(
         e: InvalidFormatException,
         headers: HttpHeaders,
         status: HttpStatus,
@@ -133,7 +148,7 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         return handleExceptionInternal(e, problem, headers, status, request)
     }
 
-    private fun handlePropertyBindingException(
+    private fun handlePropertyBinding(
         e: PropertyBindingException,
         headers: HttpHeaders,
         status: HttpStatus,
@@ -143,6 +158,26 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val problemType = ProblemType.MESSAGE_NOT_READABLE
         val detail = "Property '$path' does not exist. " +
                 "Please correct or remove this property and try again."
+
+        val problem = Problem(
+            status = status.value(),
+            type = problemType.uri,
+            title = problemType.title,
+            detail = detail
+        )
+
+        return handleExceptionInternal(e, problem, headers, status, request)
+    }
+
+    private fun handleMethodArgumentTypeMismatch(
+        e: MethodArgumentTypeMismatchException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        val problemType = ProblemType.INVALID_PARAMETER
+        val detail = "The URL parameter '${e.name}' was assigned the value '${e.value}', " +
+                "which is of an invalid type. Please correct and enter a value compatible with the type ${e.requiredType?.simpleName}."
 
         val problem = Problem(
             status = status.value(),
