@@ -147,6 +147,24 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         return handleExceptionInternal(e, problem, headers, status, request)
     }
 
+    @ExceptionHandler(Exception::class)
+    fun handleUncaught(e: Exception, request: WebRequest): ResponseEntity<Any> {
+        val headers = HttpHeaders()
+        val status = HttpStatus.INTERNAL_SERVER_ERROR
+        val problemType = ProblemType.SYSTEM_ERROR
+        val detail = "An unexpected internal system error has occurred. " +
+                "Please try again and if the problem persists, contact your system administrator."
+
+        val problem = Problem(
+            status = status.value(),
+            type = problemType.uri,
+            title = problemType.title,
+            detail = detail
+        )
+
+        return handleExceptionInternal(e, problem, headers, status, request)
+    }
+
     private fun handleInvalidFormat(
         e: InvalidFormatException,
         headers: HttpHeaders,

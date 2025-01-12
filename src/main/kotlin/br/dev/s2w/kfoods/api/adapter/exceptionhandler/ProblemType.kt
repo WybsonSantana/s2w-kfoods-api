@@ -9,7 +9,8 @@ enum class ProblemType(
     ENTITY_IN_USE("/entity-in-use", "Entity in use"),
     RESOURCE_NOT_FOUND("/resource-not-found", "Resource not found"),
     MESSAGE_NOT_READABLE("/message-not-readable", "Message not readable"),
-    INVALID_PARAMETER("/invalid-parameter", "Invalid parameter");
+    INVALID_PARAMETER("/invalid-parameter", "Invalid parameter"),
+    SYSTEM_ERROR("/system-error", "System error");
 
     val uri: String
         get() = "https://kfoods.com.br$path"
