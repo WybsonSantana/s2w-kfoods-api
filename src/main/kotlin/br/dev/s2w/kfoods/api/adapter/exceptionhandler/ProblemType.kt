@@ -7,11 +7,11 @@ enum class ProblemType(
 
     BUSINESS_ERROR("/business-error", "Business rule violation"),
     ENTITY_IN_USE("/entity-in-use", "Entity in use"),
-    ENTITY_NOT_FOUND("/entity-not-found", "Entity not found"),
+    RESOURCE_NOT_FOUND("/resource-not-found", "Resource not found"),
     MESSAGE_NOT_READABLE("/message-not-readable", "Message not readable"),
     INVALID_PARAMETER("/invalid-parameter", "Invalid parameter");
 
     val uri: String
-        get() = "https://jfoods.com.br$path"
+        get() = "https://kfoods.com.br$path"
 
 }

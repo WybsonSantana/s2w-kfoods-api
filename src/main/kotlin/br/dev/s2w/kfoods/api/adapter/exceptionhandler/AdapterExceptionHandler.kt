@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+import org.springframework.web.servlet.NoHandlerFoundException
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @ControllerAdvice
@@ -76,6 +77,25 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         return super.handleTypeMismatch(e, headers, status, request)
     }
 
+    override fun handleNoHandlerFoundException(
+        e: NoHandlerFoundException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        val problemType = ProblemType.RESOURCE_NOT_FOUND
+        val detail = "The resource '${e.requestURL}', which you tried to access, is non-existent."
+
+        val problem = Problem(
+            status = status.value(),
+            type = problemType.uri,
+            title = problemType.title,
+            detail = detail
+        )
+
+        return handleExceptionInternal(e, problem, headers, status, request)
+    }
+
     @ExceptionHandler(BusinessException::class)
     fun handleBusiness(e: BusinessException, request: WebRequest): ResponseEntity<Any> {
         val headers = HttpHeaders()
@@ -114,7 +134,7 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
     fun handleEntityNotFound(e: EntityNotFoundException, request: WebRequest): ResponseEntity<Any> {
         val headers = HttpHeaders()
         val status = HttpStatus.NOT_FOUND
-        val problemType = ProblemType.ENTITY_NOT_FOUND
+        val problemType = ProblemType.RESOURCE_NOT_FOUND
         val detail = e.message
 
         val problem = Problem(
