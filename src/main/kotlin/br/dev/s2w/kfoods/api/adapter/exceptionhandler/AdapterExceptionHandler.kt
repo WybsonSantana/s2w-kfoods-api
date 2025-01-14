@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
@@ -57,13 +58,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val problemType = ProblemType.MESSAGE_NOT_READABLE
         val detail = "The request payload is invalid. Check syntax error!"
 
-        val problem = Problem(
-            status = status.value(),
-            type = problemType.uri,
-            title = problemType.title,
-            detail = detail,
-            userMessage = genericUserMessage
-        )
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = genericUserMessage)
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
@@ -90,13 +86,23 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val problemType = ProblemType.RESOURCE_NOT_FOUND
         val detail = "The resource '${e.requestURL}', which you tried to access, is non-existent."
 
-        val problem = Problem(
-            status = status.value(),
-            type = problemType.uri,
-            title = problemType.title,
-            detail = detail,
-            userMessage = genericUserMessage
-        )
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = genericUserMessage)
+
+        return handleExceptionInternal(e, problem, headers, status, request)
+    }
+
+    override fun handleMethodArgumentNotValid(
+        e: MethodArgumentNotValidException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        val problemType = ProblemType.INVALID_DATA
+        val detail = "One or more fields are invalid. Fill in correctly and try again!"
+
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = detail)
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
@@ -106,15 +112,10 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val headers = HttpHeaders()
         val status = HttpStatus.BAD_REQUEST
         val problemType = ProblemType.BUSINESS_ERROR
-        val detail = e.message
+        val detail = e.message.toString()
 
-        val problem = Problem(
-            status = status.value(),
-            type = problemType.uri,
-            title = problemType.title,
-            detail = detail,
-            userMessage = genericUserMessage
-        )
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = genericUserMessage)
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
@@ -124,15 +125,10 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val headers = HttpHeaders()
         val status = HttpStatus.CONFLICT
         val problemType = ProblemType.ENTITY_IN_USE
-        val detail = e.message
+        val detail = e.message.toString()
 
-        val problem = Problem(
-            status = status.value(),
-            type = problemType.uri,
-            title = problemType.title,
-            detail = detail,
-            userMessage = genericUserMessage
-        )
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = genericUserMessage)
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
@@ -142,15 +138,10 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val headers = HttpHeaders()
         val status = HttpStatus.NOT_FOUND
         val problemType = ProblemType.RESOURCE_NOT_FOUND
-        val detail = e.message
+        val detail = e.message.toString()
 
-        val problem = Problem(
-            status = status.value(),
-            type = problemType.uri,
-            title = problemType.title,
-            detail = detail,
-            userMessage = genericUserMessage
-        )
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = genericUserMessage)
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
@@ -165,13 +156,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
 
         e.printStackTrace()
 
-        val problem = Problem(
-            status = status.value(),
-            type = problemType.uri,
-            title = problemType.title,
-            detail = detail,
-            userMessage = genericUserMessage
-        )
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = genericUserMessage)
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
@@ -187,13 +173,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val detail = "Property '$path' has been assigned the value '${e.value}', " +
                 "which is of an invalid type. Correct and enter a value compatible with type ${e.targetType.simpleName}."
 
-        val problem = Problem(
-            status = status.value(),
-            type = problemType.uri,
-            title = problemType.title,
-            detail = detail,
-            userMessage = genericUserMessage
-        )
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = genericUserMessage)
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
@@ -209,13 +190,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val detail = "Property '$path' does not exist. " +
                 "Please correct or remove this property and try again."
 
-        val problem = Problem(
-            status = status.value(),
-            type = problemType.uri,
-            title = problemType.title,
-            detail = detail,
-            userMessage = genericUserMessage
-        )
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = genericUserMessage)
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
@@ -230,15 +206,18 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val detail = "The URL parameter '${e.name}' was assigned the value '${e.value}', " +
                 "which is of an invalid type. Please correct and enter a value compatible with the type ${e.requiredType?.simpleName}."
 
-        val problem = Problem(
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = genericUserMessage)
+
+        return handleExceptionInternal(e, problem, headers, status, request)
+    }
+
+    private fun createProblem(status: HttpStatus, problemType: ProblemType, detail: String): Problem =
+        Problem(
             status = status.value(),
             type = problemType.uri,
             title = problemType.title,
             detail = detail,
-            userMessage = genericUserMessage
         )
-
-        return handleExceptionInternal(e, problem, headers, status, request)
-    }
 
 }
