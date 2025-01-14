@@ -15,6 +15,7 @@ import org.springframework.http.server.ServletServerHttpRequest
 import org.springframework.util.ReflectionUtils
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/restaurants")
@@ -33,7 +34,7 @@ class RestaurantController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun add(@RequestBody restaurant: Restaurant): Restaurant =
+    fun add(@RequestBody @Valid restaurant: Restaurant): Restaurant =
         try {
             restaurantRegister.save(restaurant)
         } catch (e: CuisineNotFoundException) {

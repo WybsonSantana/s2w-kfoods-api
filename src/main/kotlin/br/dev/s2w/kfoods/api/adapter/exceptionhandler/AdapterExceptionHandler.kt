@@ -163,6 +163,8 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val detail = "An unexpected internal system error has occurred. " +
                 "Please try again and if the problem persists, contact your system administrator."
 
+        e.printStackTrace()
+
         val problem = Problem(
             status = status.value(),
             type = problemType.uri,
