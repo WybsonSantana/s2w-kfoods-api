@@ -101,8 +101,16 @@ class AdapterExceptionHandler : ResponseEntityExceptionHandler() {
         val problemType = ProblemType.INVALID_DATA
         val detail = "One or more fields are invalid. Fill in correctly and try again!"
 
+        val problemFields = e.bindingResult.fieldErrors
+            .map { fieldError ->
+                Problem.Field(
+                    name = fieldError.field,
+                    userMessage = fieldError.defaultMessage
+                )
+            }
+
         val problem = createProblem(status, problemType, detail)
-            .copy(userMessage = detail)
+            .copy(userMessage = detail, fields = problemFields)
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
