@@ -1,13 +1,13 @@
 package br.dev.s2w.kfoods.api.domain.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import javax.persistence.*
-import javax.validation.constraints.NotNull
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.PositiveOrZero
 
 @Entity
 data class Restaurant(
@@ -15,16 +15,16 @@ data class Restaurant(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @field:NotNull
+    @field:NotBlank
     @Column(nullable = false)
     var name: String? = null,
 
+    @field:PositiveOrZero
     @Column(name = "delivery_fee", nullable = false)
     var deliveryFee: BigDecimal? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "cuisine_id", nullable = false)
-    @JsonIgnoreProperties("hibernateLazyInitializer")
     var cuisine: Cuisine? = null,
 
     @Embedded
