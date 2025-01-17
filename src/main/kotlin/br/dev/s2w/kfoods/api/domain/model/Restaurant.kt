@@ -6,7 +6,9 @@ import org.hibernate.annotations.UpdateTimestamp
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import javax.persistence.*
+import javax.validation.Valid
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 import javax.validation.constraints.PositiveOrZero
 
 @Entity
@@ -23,6 +25,8 @@ data class Restaurant(
     @Column(name = "delivery_fee", nullable = false)
     var deliveryFee: BigDecimal? = null,
 
+    @field:Valid
+    @field:NotNull
     @ManyToOne
     @JoinColumn(name = "cuisine_id", nullable = false)
     var cuisine: Cuisine? = null,
