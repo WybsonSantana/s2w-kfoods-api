@@ -1,5 +1,6 @@
 package br.dev.s2w.kfoods.api.domain.model
 
+import br.dev.s2w.kfoods.api.Groups
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
@@ -17,16 +18,16 @@ data class Restaurant(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @field:NotBlank
+    @field:NotBlank(groups = [Groups.RestaurantRegistration::class])
     @Column(nullable = false)
     var name: String? = null,
 
-    @field:PositiveOrZero
+    @field:PositiveOrZero(groups = [Groups.RestaurantRegistration::class])
     @Column(name = "delivery_fee", nullable = false)
     var deliveryFee: BigDecimal? = null,
 
     @field:Valid
-    @field:NotNull
+    @field:NotNull(groups = [Groups.RestaurantRegistration::class])
     @ManyToOne
     @JoinColumn(name = "cuisine_id", nullable = false)
     var cuisine: Cuisine? = null,

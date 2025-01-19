@@ -6,6 +6,7 @@ import br.dev.s2w.kfoods.api.domain.service.CuisineRegisterService
 import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/cuisines")
@@ -24,7 +25,7 @@ class CuisineController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun add(@RequestBody cuisine: Cuisine): Cuisine =
+    fun add(@RequestBody @Valid cuisine: Cuisine): Cuisine =
         cuisineRegister.save(cuisine)
 
     @PutMapping("/{cuisineId}")

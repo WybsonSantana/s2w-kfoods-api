@@ -1,5 +1,6 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
+import br.dev.s2w.kfoods.api.Groups
 import br.dev.s2w.kfoods.api.domain.exception.BusinessException
 import br.dev.s2w.kfoods.api.domain.exception.CuisineNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.http.server.ServletServerHttpRequest
 import org.springframework.util.ReflectionUtils
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
@@ -34,7 +36,7 @@ class RestaurantController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun add(@RequestBody @Valid restaurant: Restaurant): Restaurant =
+    fun add(@RequestBody @Validated(Groups.RestaurantRegistration::class) restaurant: Restaurant): Restaurant =
         try {
             restaurantRegister.save(restaurant)
         } catch (e: CuisineNotFoundException) {
