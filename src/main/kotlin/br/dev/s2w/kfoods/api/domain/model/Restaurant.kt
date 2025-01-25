@@ -27,6 +27,9 @@ data class Restaurant(
     var deliveryFee: BigDecimal? = null,
 
     @field:Valid
+    //@field:ConvertGroup(from = Default::class, to = Groups.CuisineId::class)
+    //The @ConvertGroup annotation has a bug in Kotlin that doesn't annotate the right attribute for validation
+    //https://stackoverflow.com/questions/79376953/javax-validations-convertgroup-annotation-does-not-work-in-a-spring-project-us
     @field:NotNull(groups = [Groups.RestaurantRegistration::class])
     @ManyToOne
     @JoinColumn(name = "cuisine_id", nullable = false)

@@ -11,7 +11,7 @@ data class Problem(
     val title: String? = null,
     val detail: String? = null,
     val userMessage: String? = null,
-    val fields: List<Field> = mutableListOf()
+    val fields: List<Field>? = null
 ) {
 
     data class Field(
