@@ -43,7 +43,10 @@ class RestaurantController(
         }
 
     @PutMapping("/{restaurantId}")
-    fun update(@PathVariable restaurantId: Long, @RequestBody restaurant: Restaurant): Restaurant =
+    fun update(
+        @PathVariable restaurantId: Long,
+        @RequestBody @Validated(Groups.RestaurantRegistration::class) restaurant: Restaurant
+    ): Restaurant =
         try {
             restaurantRegister.find(restaurantId).also {
                 BeanUtils.copyProperties(

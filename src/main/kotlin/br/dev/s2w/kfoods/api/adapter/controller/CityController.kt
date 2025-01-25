@@ -1,17 +1,15 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
-import br.dev.s2w.kfoods.api.adapter.exceptionhandler.Problem
+import br.dev.s2w.kfoods.api.Groups
 import br.dev.s2w.kfoods.api.domain.exception.BusinessException
-import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import br.dev.s2w.kfoods.api.domain.exception.StateNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.City
 import br.dev.s2w.kfoods.api.domain.repository.CityRepository
 import br.dev.s2w.kfoods.api.domain.service.CityRegisterService
 import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/cities")
@@ -30,7 +28,7 @@ class CityController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun add(@RequestBody city: City) =
+    fun add(@RequestBody @Validated(Groups.CityRegistration::class) city: City) =
         try {
             cityRegister.save(city)
         } catch (e: StateNotFoundException) {
@@ -38,7 +36,10 @@ class CityController(
         }
 
     @PutMapping("/{cityId}")
-    fun update(@PathVariable cityId: Long, @RequestBody city: City) =
+    fun update(
+        @PathVariable cityId: Long,
+        @RequestBody @Validated(Groups.CityRegistration::class) city: City
+    ) =
         try {
             cityRegister.find(cityId).also {
                 BeanUtils.copyProperties(city, it, "id")

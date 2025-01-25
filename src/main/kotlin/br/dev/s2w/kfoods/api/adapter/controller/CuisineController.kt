@@ -29,7 +29,7 @@ class CuisineController(
         cuisineRegister.save(cuisine)
 
     @PutMapping("/{cuisineId}")
-    fun update(@PathVariable cuisineId: Long, @RequestBody cuisine: Cuisine): Cuisine =
+    fun update(@PathVariable cuisineId: Long, @RequestBody @Valid cuisine: Cuisine): Cuisine =
         cuisineRegister.find(cuisineId).also {
             BeanUtils.copyProperties(cuisine, it, "id")
             cuisineRegister.save(it)
