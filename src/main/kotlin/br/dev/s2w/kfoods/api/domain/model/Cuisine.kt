@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull
 
 @Entity
 data class Cuisine(
-    //@field:NotNull(groups = [Groups.CuisineId::class])
     @field:NotNull(groups = [Groups.RestaurantRegistration::class])
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

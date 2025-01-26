@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull
 
 @Entity
 data class State(
-    //@field:NotNull(groups = [Groups.StateId::class])
     @field:NotNull(groups = [Groups.CityRegistration::class])
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
