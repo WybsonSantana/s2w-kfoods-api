@@ -1,7 +1,7 @@
 package br.dev.s2w.kfoods.api.domain.model
 
-import br.dev.s2w.kfoods.api.core.validation.DeliveryFee
 import br.dev.s2w.kfoods.api.core.validation.Groups
+import br.dev.s2w.kfoods.api.core.validation.Multiple
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
@@ -24,8 +24,8 @@ data class Restaurant(
     var name: String? = null,
 
     @field:NotNull(groups = [Groups.RestaurantRegistration::class])
-    @field:DeliveryFee(groups = [Groups.RestaurantRegistration::class])
-    //@field:PositiveOrZero(groups = [Groups.RestaurantRegistration::class])
+    @field:PositiveOrZero(groups = [Groups.RestaurantRegistration::class])
+    @field:Multiple(groups = [Groups.RestaurantRegistration::class], number = 5)
     @Column(name = "delivery_fee", nullable = false)
     var deliveryFee: BigDecimal? = null,
 
