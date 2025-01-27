@@ -1,6 +1,6 @@
 package br.dev.s2w.kfoods.api.domain.model
 
-import br.dev.s2w.kfoods.api.Groups
+import br.dev.s2w.kfoods.api.core.validation.Groups
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull

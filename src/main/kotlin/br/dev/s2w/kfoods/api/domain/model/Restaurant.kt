@@ -1,6 +1,6 @@
 package br.dev.s2w.kfoods.api.domain.model
 
-import br.dev.s2w.kfoods.api.Groups
+import br.dev.s2w.kfoods.api.core.validation.Groups
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp

@@ -1,6 +1,6 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
-import br.dev.s2w.kfoods.api.Groups
+import br.dev.s2w.kfoods.api.core.validation.Groups
 import br.dev.s2w.kfoods.api.domain.exception.BusinessException
 import br.dev.s2w.kfoods.api.domain.exception.CuisineNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
