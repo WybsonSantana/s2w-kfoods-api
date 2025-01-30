@@ -11,10 +11,10 @@ data class Problem(
     val title: String? = null,
     val detail: String? = null,
     val userMessage: String? = null,
-    val fields: List<Field>? = null
+    val objects: List<Object>? = null
 ) {
 
-    data class Field(
+    data class Object(
         val name: String? = null,
         val userMessage: String? = null
     )

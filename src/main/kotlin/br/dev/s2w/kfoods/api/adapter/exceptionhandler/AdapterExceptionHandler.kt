@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -105,18 +106,22 @@ class AdapterExceptionHandler(
         val problemType = ProblemType.INVALID_DATA
         val detail = "One or more fields are invalid. Fill in correctly and try again!"
 
-        val problemFields = e.bindingResult.fieldErrors
-            .map { fieldError ->
-                val message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())
+        val problemObjects = e.bindingResult.allErrors
+            .map { objectError ->
+                val message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale())
+                val name = when (objectError) {
+                    is FieldError -> objectError.field
+                    else -> objectError.objectName
+                }
 
-                Problem.Field(
-                    name = fieldError.field,
+                Problem.Object(
+                    name = name,
                     userMessage = message
                 )
             }
 
         val problem = createProblem(status, problemType, detail)
-            .copy(userMessage = detail, fields = problemFields)
+            .copy(userMessage = detail, objects = problemObjects)
 
         return handleExceptionInternal(e, problem, headers, status, request)
     }
