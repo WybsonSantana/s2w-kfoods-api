@@ -1,7 +1,7 @@
 package br.dev.s2w.kfoods.api.domain.model
 
 import br.dev.s2w.kfoods.api.core.validation.FreeDeliveryFeeIncludesDescription
-import br.dev.s2w.kfoods.api.core.validation.Groups
+import br.dev.s2w.kfoods.api.core.validation.Groups.RestaurantRegistration
 import br.dev.s2w.kfoods.api.core.validation.Multiple
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.hibernate.annotations.CreationTimestamp
@@ -13,9 +13,10 @@ import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.PositiveOrZero
+import javax.validation.groups.Default
 
 @FreeDeliveryFeeIncludesDescription(
-    groups = [Groups.RestaurantRegistration::class],
+    groups = [Default::class, RestaurantRegistration::class],
     fieldValue = "deliveryFee",
     fieldDescription = "name",
     requiredDescription = "Frete Grátis"
@@ -26,18 +27,18 @@ data class Restaurant(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @field:NotBlank(groups = [Groups.RestaurantRegistration::class], message = "Name is required")
+    @field:NotBlank(groups = [Default::class, RestaurantRegistration::class], message = "Name is required")
     @Column(nullable = false)
     var name: String? = null,
 
-    @field:NotNull(groups = [Groups.RestaurantRegistration::class])
-    @field:PositiveOrZero(groups = [Groups.RestaurantRegistration::class])
-    @field:Multiple(groups = [Groups.RestaurantRegistration::class], number = 5)
+    @field:NotNull(groups = [Default::class, RestaurantRegistration::class])
+    @field:PositiveOrZero(groups = [Default::class, RestaurantRegistration::class])
+    @field:Multiple(groups = [Default::class, RestaurantRegistration::class], number = 5)
     @Column(name = "delivery_fee", nullable = false)
     var deliveryFee: BigDecimal? = null,
 
     @field:Valid
-    @field:NotNull(groups = [Groups.RestaurantRegistration::class])
+    @field:NotNull(groups = [Default::class, RestaurantRegistration::class])
     @ManyToOne
     @JoinColumn(name = "cuisine_id", nullable = false)
     var cuisine: Cuisine? = null,
