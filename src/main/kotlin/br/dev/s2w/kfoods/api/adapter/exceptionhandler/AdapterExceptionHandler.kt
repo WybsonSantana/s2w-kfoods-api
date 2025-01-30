@@ -1,5 +1,6 @@
 package br.dev.s2w.kfoods.api.adapter.exceptionhandler
 
+import br.dev.s2w.kfoods.api.core.validation.ValidationException
 import br.dev.s2w.kfoods.api.domain.exception.BusinessException
 import br.dev.s2w.kfoods.api.domain.exception.EntityInUseException
 import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
@@ -13,6 +14,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.validation.BindingResult
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -103,27 +105,7 @@ class AdapterExceptionHandler(
         status: HttpStatus,
         request: WebRequest
     ): ResponseEntity<Any> {
-        val problemType = ProblemType.INVALID_DATA
-        val detail = "One or more fields are invalid. Fill in correctly and try again!"
-
-        val problemObjects = e.bindingResult.allErrors
-            .map { objectError ->
-                val message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale())
-                val name = when (objectError) {
-                    is FieldError -> objectError.field
-                    else -> objectError.objectName
-                }
-
-                Problem.Object(
-                    name = name,
-                    userMessage = message
-                )
-            }
-
-        val problem = createProblem(status, problemType, detail)
-            .copy(userMessage = detail, objects = problemObjects)
-
-        return handleExceptionInternal(e, problem, headers, status, request)
+        return handleValidationInternal(e, e.bindingResult, headers, status, request)
     }
 
     @ExceptionHandler(BusinessException::class)
@@ -179,6 +161,14 @@ class AdapterExceptionHandler(
             .copy(userMessage = genericUserMessage)
 
         return handleExceptionInternal(e, problem, headers, status, request)
+    }
+
+    @ExceptionHandler(ValidationException::class)
+    fun handleValidationException(e: ValidationException, request: WebRequest): ResponseEntity<Any> {
+        val headers = HttpHeaders()
+        val status = HttpStatus.BAD_REQUEST
+
+        return handleValidationInternal(e, e.bindingResult, headers, status, request)
     }
 
     private fun handleInvalidFormat(
@@ -239,4 +229,33 @@ class AdapterExceptionHandler(
             detail = detail,
         )
 
+    private fun handleValidationInternal(
+        e: Exception,
+        bindingResult: BindingResult,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        val problemType = ProblemType.INVALID_DATA
+        val detail = "One or more fields are invalid. Fill in correctly and try again!"
+
+        val problemObjects = bindingResult.allErrors
+            .map { objectError ->
+                val message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale())
+                val name = when (objectError) {
+                    is FieldError -> objectError.field
+                    else -> objectError.objectName
+                }
+
+                Problem.Object(
+                    name = name,
+                    userMessage = message
+                )
+            }
+
+        val problem = createProblem(status, problemType, detail)
+            .copy(userMessage = detail, objects = problemObjects)
+
+        return handleExceptionInternal(e, problem, headers, status, request)
+    }
 }
