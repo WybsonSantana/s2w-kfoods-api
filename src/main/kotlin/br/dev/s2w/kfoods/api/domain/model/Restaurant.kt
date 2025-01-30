@@ -1,5 +1,6 @@
 package br.dev.s2w.kfoods.api.domain.model
 
+import br.dev.s2w.kfoods.api.core.validation.FreeDeliveryFeeIncludesDescription
 import br.dev.s2w.kfoods.api.core.validation.Groups
 import br.dev.s2w.kfoods.api.core.validation.Multiple
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -13,6 +14,12 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.PositiveOrZero
 
+@FreeDeliveryFeeIncludesDescription(
+    groups = [Groups.RestaurantRegistration::class],
+    fieldValue = "deliveryFee",
+    fieldDescription = "name",
+    requiredDescription = "Frete Grátis"
+)
 @Entity
 data class Restaurant(
     @Id
