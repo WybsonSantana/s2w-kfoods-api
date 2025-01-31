@@ -9,41 +9,40 @@ import javax.persistence.*
 data class DeliveryOrder(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    val id: Long? = null,
 
-    var subtotal: BigDecimal? = null,
+    val subtotal: BigDecimal? = null,
 
-    var deliveryFee: BigDecimal? = null,
+    val deliveryFee: BigDecimal? = null,
 
-    var totalAmount: BigDecimal? = null,
+    val totalAmount: BigDecimal? = null,
 
     @Embedded
-    var deliveryAddress: Address? = null,
+    val deliveryAddress: Address? = null,
 
-    var status: OrderStatus? = null,
+    val status: OrderStatus? = null,
 
     @CreationTimestamp
-    var registrationDate: LocalDateTime? = null,
+    val registrationDate: LocalDateTime? = null,
 
-    var confirmationDate: LocalDateTime? = null,
+    val confirmationDate: LocalDateTime? = null,
 
-    var cancellationDate: LocalDateTime? = null,
+    val cancellationDate: LocalDateTime? = null,
 
-    var deliveryDate: LocalDateTime? = null,
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    var paymentMethod: PaymentMethod? = null,
+    val deliveryDate: LocalDateTime? = null,
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    var restaurant: Restaurant? = null,
+    val paymentMethod: PaymentMethod? = null,
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    var customer: Identity? = null,
+    val restaurant: Restaurant? = null,
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    val customer: Identity? = null,
 
     @OneToMany(mappedBy = "deliveryOrder")
-    var items: MutableList<OrderItem> = mutableListOf()
-
+    val items: MutableList<OrderItem> = mutableListOf()
 )

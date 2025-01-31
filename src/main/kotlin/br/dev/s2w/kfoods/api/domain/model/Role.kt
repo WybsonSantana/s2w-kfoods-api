@@ -6,10 +6,10 @@ import javax.persistence.*
 data class Role(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    val id: Long? = null,
 
     @Column(nullable = false)
-    var name: String? = null,
+    val name: String? = null,
 
     @ManyToMany
     @JoinTable(
@@ -17,5 +17,5 @@ data class Role(
         joinColumns = [JoinColumn(name = "role_id")],
         inverseJoinColumns = [JoinColumn(name = "permission_id")]
     )
-    var permission: MutableList<Permission> = mutableListOf()
+    val permission: MutableList<Permission> = mutableListOf()
 )

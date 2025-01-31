@@ -7,21 +7,21 @@ import javax.persistence.*
 data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    val id: Long? = null,
 
     @Column(nullable = false)
-    var name: String? = null,
+    val name: String? = null,
 
     @Column(nullable = false)
-    var description: String? = null,
+    val description: String? = null,
 
     @Column(nullable = false)
-    var price: BigDecimal? = null,
+    val price: BigDecimal? = null,
 
     @Column(nullable = false)
-    var active: Boolean? = null,
+    val active: Boolean? = null,
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    var restaurant: Restaurant? = null
+    val restaurant: Restaurant? = null
 )

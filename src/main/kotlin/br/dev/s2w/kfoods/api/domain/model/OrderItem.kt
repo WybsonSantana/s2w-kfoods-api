@@ -7,21 +7,21 @@ import javax.persistence.*
 data class OrderItem(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    val id: Long? = null,
 
-    var unitPrice: BigDecimal? = null,
+    val unitPrice: BigDecimal? = null,
 
-    var totalPrice: BigDecimal? = null,
+    val totalPrice: BigDecimal? = null,
 
-    var quantity: Int? = null,
+    val quantity: Int? = null,
 
-    var note: String? = null,
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    var deliveryOrder: DeliveryOrder? = null,
+    val note: String? = null,
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    var product: Product? = null,
+    val deliveryOrder: DeliveryOrder? = null,
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    val product: Product? = null,
     )

@@ -5,7 +5,11 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CuisineRepository : CustomJpaRepository<Cuisine, Long> {
+
     fun findAllByNameContaining(name: String): List<Cuisine>
+
     fun findByName(name: String): Cuisine?
+
     fun existsByName(name: String): Boolean
+
 }

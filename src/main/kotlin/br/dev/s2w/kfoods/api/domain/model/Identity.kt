@@ -8,20 +8,20 @@ import javax.persistence.*
 data class Identity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    val id: Long? = null,
 
     @Column(nullable = false)
-    var name: String? = null,
+    val name: String? = null,
 
     @Column(nullable = false)
-    var email: String? = null,
+    val email: String? = null,
 
     @Column(nullable = false)
-    var password: String? = null,
+    val password: String? = null,
 
     @CreationTimestamp
     @Column(nullable = false)
-    var registrationDate: LocalDateTime? = null,
+    val registrationDate: LocalDateTime? = null,
 
     @ManyToMany
     @JoinTable(
@@ -29,5 +29,5 @@ data class Identity(
         joinColumns = [JoinColumn(name = "identity_id")],
         inverseJoinColumns = [JoinColumn(name = "role_id")]
     )
-    var roles: MutableList<Role> = mutableListOf()
+    val roles: MutableList<Role> = mutableListOf()
 )

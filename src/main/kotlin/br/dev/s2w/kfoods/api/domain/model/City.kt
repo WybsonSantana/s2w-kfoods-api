@@ -10,15 +10,15 @@ import javax.validation.constraints.NotNull
 data class City(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    val id: Long? = null,
 
     @field:NotBlank(groups = [Groups.CityRegistration::class])
     @Column(nullable = false)
-    var name: String? = null,
+    val name: String? = null,
 
     @field:Valid
     @field:NotNull(groups = [Groups.CityRegistration::class])
     @ManyToOne
     @JoinColumn(nullable = false)
-    var state: State? = null
+    val state: State? = null
 )

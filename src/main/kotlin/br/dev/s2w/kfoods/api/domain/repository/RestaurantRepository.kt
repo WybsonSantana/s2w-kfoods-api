@@ -9,6 +9,7 @@ import java.math.BigDecimal
 @Repository
 interface RestaurantRepository : CustomJpaRepository<Restaurant, Long>,
     RestaurantRepositoryQueries, JpaSpecificationExecutor<Restaurant> {
+
     @Query("from Restaurant restaurant join fetch restaurant.cuisine")
     override fun findAll(): List<Restaurant>
 
@@ -18,8 +19,11 @@ interface RestaurantRepository : CustomJpaRepository<Restaurant, Long>,
     fun queryByName(name: String, cuisineId: Long): List<Restaurant>
 
     //fun findByNameContainingAndCuisineId(name: String, cuisineId: Long): List<Restaurant>
+
     fun getFirstRestaurantByNameContaining(name: String): Restaurant?
+
     fun queryTop2ByNameContaining(name: String): List<Restaurant>
+
     fun countByCuisineId(cuisineId: Long): Int
 
 }
