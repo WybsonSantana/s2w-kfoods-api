@@ -19,7 +19,7 @@ class CuisineRegisterIntegrationTest {
     private lateinit var cuisineRegister: CuisineRegisterService
 
     @Test
-    fun `test cuisine registration successfully`() {
+    fun `should assign id when registering kitchen with correct data`() {
         // scenario
         val cuisine = Cuisine(name = "Chinesa")
 
@@ -32,7 +32,7 @@ class CuisineRegisterIntegrationTest {
     }
 
     @Test
-    fun `test cuisine registration without name`() {
+    fun `should fail when registering cuisine without name`() {
         // scenario
         val cuisine = Cuisine(name = null)
 
