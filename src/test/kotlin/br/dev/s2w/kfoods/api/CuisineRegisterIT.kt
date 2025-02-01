@@ -15,7 +15,7 @@ import javax.validation.ConstraintViolationException
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
-class CuisineRegisterIntegrationTest {
+class CuisineRegisterIT {
 
     @Autowired
     private lateinit var cuisineRegister: CuisineRegisterService
