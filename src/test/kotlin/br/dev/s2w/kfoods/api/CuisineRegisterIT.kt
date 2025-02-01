@@ -3,6 +3,8 @@ package br.dev.s2w.kfoods.api
 import io.restassured.RestAssured.enableLoggingOfRequestAndResponseIfValidationFails
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
+import org.hamcrest.Matchers.hasItems
+import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
@@ -29,6 +31,21 @@ class CuisineRegisterIT {
             .get()
             .then()
             .statusCode(HttpStatus.OK.value())
+    }
+
+    @Test
+    fun `should contain 4 cuisines when querying cuisines`() {
+        enableLoggingOfRequestAndResponseIfValidationFails()
+
+        given()
+            .basePath("/cuisines")
+            .port(port)
+            .accept(ContentType.JSON)
+            .`when`()
+            .get()
+            .then()
+            .body("", hasSize<Int>(4))
+            .body("name", hasItems("Indiana", "Tailandesa", "Argentina", "Brasileira"))
     }
 
 }
