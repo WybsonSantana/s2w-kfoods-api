@@ -1,5 +1,7 @@
 package br.dev.s2w.kfoods.api
 
+import br.dev.s2w.kfoods.api.domain.exception.EntityInUseException
+import br.dev.s2w.kfoods.api.domain.exception.EntityNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.service.CuisineRegisterService
 import org.assertj.core.api.Assertions.assertThat
@@ -20,29 +22,38 @@ class CuisineRegisterIntegrationTest {
 
     @Test
     fun `should assign id when registering kitchen with correct data`() {
-        // scenario
         val cuisine = Cuisine(name = "Chinesa")
 
-        // action
         cuisineRegister.save(cuisine).also { newCuisine ->
-
-            // validation
             assertThat(newCuisine.id).isNotNull()
         }
     }
 
     @Test
     fun `should fail when registering cuisine without name`() {
-        // scenario
         val cuisine = Cuisine(name = null)
 
-        // action
-        val expectedError = assertThrows<ConstraintViolationException> {
+        assertThrows<ConstraintViolationException> {
             cuisineRegister.save(cuisine)
         }
+    }
 
-        // validation
-        assertThat(expectedError).isNotNull()
+    @Test
+    fun `should fail when deleting cuisine in use`() {
+        val cuisineId = 1L
+
+        assertThrows<EntityInUseException> {
+            cuisineRegister.remove(cuisineId)
+        }
+    }
+
+    @Test
+    fun `should fail when deleting cuisine not found`() {
+        val cuisineId = 100L
+
+        assertThrows<EntityNotFoundException> {
+            cuisineRegister.remove(cuisineId)
+        }
     }
 
 }
