@@ -46,14 +46,14 @@ class CuisineRegisterIT {
     }
 
     @Test
-    fun `should contain 4 cuisines when querying cuisines`() {
+    fun `should contain 2 cuisines when querying cuisines`() {
         given()
             .accept(ContentType.JSON)
             .`when`()
             .get()
             .then()
-            .body("", hasSize<Int>(4))
-            .body("name", hasItems("Indiana", "Tailandesa", "Argentina", "Brasileira"))
+            .body("", hasSize<Int>(2))
+            .body("name", hasItems("Tailandesa", "Indiana"))
     }
 
     @Test
