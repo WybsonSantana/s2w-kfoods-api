@@ -47,4 +47,16 @@ class CuisineRegisterIT {
             .body("name", hasItems("Indiana", "Tailandesa", "Argentina", "Brasileira"))
     }
 
+    @Test
+    fun `should return status 201 when registering cuisine`() {
+        given()
+            .body("{\"name\":\"Chinesa\"}")
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+            .`when`()
+            .post()
+            .then()
+            .statusCode(HttpStatus.CREATED.value())
+    }
+
 }
