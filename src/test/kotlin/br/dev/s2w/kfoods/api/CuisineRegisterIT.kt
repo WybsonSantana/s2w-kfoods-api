@@ -3,8 +3,7 @@ package br.dev.s2w.kfoods.api
 import io.restassured.RestAssured.*
 import io.restassured.http.ContentType
 import org.flywaydb.core.Flyway
-import org.hamcrest.Matchers.hasItems
-import org.hamcrest.Matchers.hasSize
+import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -53,7 +52,7 @@ class CuisineRegisterIT {
             .get()
             .then()
             .body("", hasSize<Int>(2))
-            .body("name", hasItems("Tailandesa", "Indiana"))
+            .body("name", hasItems("Brasileira", "Americana"))
     }
 
     @Test
@@ -66,6 +65,27 @@ class CuisineRegisterIT {
             .post()
             .then()
             .statusCode(HttpStatus.CREATED.value())
+    }
+
+    @Test
+    fun `should return correct response and status when querying existing cuisine`() {
+        given()
+            .pathParam("cuisineId", 2)
+            .accept(ContentType.JSON)
+            .`when`()["/{cuisineId}"]
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .body("name", equalTo("Americana"))
+    }
+
+    @Test
+    fun `should return status 404 when querying non-existent cuisine`() {
+        given()
+            .pathParam("cuisineId", 100)
+            .accept(ContentType.JSON)
+            .`when`()["/{cuisineId}"]
+            .then()
+            .statusCode(HttpStatus.NOT_FOUND.value())
     }
 
 }
