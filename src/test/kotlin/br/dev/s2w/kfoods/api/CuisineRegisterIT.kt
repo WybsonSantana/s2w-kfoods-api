@@ -1,10 +1,10 @@
 package br.dev.s2w.kfoods.api
 
-import io.restassured.RestAssured.enableLoggingOfRequestAndResponseIfValidationFails
-import io.restassured.RestAssured.given
+import io.restassured.RestAssured.*
 import io.restassured.http.ContentType
 import org.hamcrest.Matchers.hasItems
 import org.hamcrest.Matchers.hasSize
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
@@ -17,15 +17,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 class CuisineRegisterIT {
 
     @LocalServerPort
-    private val port: Int = 0
+    private val serverPort: Int = 0
+
+    @BeforeEach
+    fun setup() {
+        enableLoggingOfRequestAndResponseIfValidationFails()
+        port = serverPort
+        basePath = "/cuisines"
+    }
 
     @Test
     fun `should return status 200 when querying cuisines`() {
-        enableLoggingOfRequestAndResponseIfValidationFails()
-
         given()
-            .basePath("/cuisines")
-            .port(port)
             .accept(ContentType.JSON)
             .`when`()
             .get()
@@ -35,11 +38,7 @@ class CuisineRegisterIT {
 
     @Test
     fun `should contain 4 cuisines when querying cuisines`() {
-        enableLoggingOfRequestAndResponseIfValidationFails()
-
         given()
-            .basePath("/cuisines")
-            .port(port)
             .accept(ContentType.JSON)
             .`when`()
             .get()
