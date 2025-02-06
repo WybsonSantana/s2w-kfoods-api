@@ -7,6 +7,7 @@ import br.dev.s2w.kfoods.api.domain.repository.StateRepository
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class StateRegisterService(
@@ -21,10 +22,12 @@ class StateRegisterService(
         }
     }
 
+    @Transactional
     fun save(state: State): State {
         return stateRepository.save(state)
     }
 
+    @Transactional
     fun remove(stateId: Long) {
         try {
             stateRepository.deleteById(stateId)

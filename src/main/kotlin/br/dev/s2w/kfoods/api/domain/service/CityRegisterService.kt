@@ -7,6 +7,7 @@ import br.dev.s2w.kfoods.api.domain.repository.CityRepository
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CityRegisterService(
@@ -22,6 +23,7 @@ class CityRegisterService(
         }
     }
 
+    @Transactional
     fun save(city: City): City {
         val stateId = city.state?.id
         val currentState = stateRegister.find(stateId!!)
@@ -31,6 +33,7 @@ class CityRegisterService(
         }
     }
 
+    @Transactional
     fun remove(cityId: Long) {
         try {
             cityRepository.deleteById(cityId)
