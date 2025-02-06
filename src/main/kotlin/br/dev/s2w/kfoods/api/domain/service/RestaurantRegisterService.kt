@@ -4,6 +4,7 @@ import br.dev.s2w.kfoods.api.domain.exception.RestaurantNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
 import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RestaurantRegisterService(
@@ -17,6 +18,7 @@ class RestaurantRegisterService(
         }
     }
 
+    @Transactional
     fun save(restaurant: Restaurant): Restaurant {
         val cuisineId = restaurant.cuisine?.id
         val currentCuisine = cuisineRegister.find(cuisineId!!)

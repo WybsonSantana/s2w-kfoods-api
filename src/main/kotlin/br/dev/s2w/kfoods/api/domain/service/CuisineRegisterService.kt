@@ -7,6 +7,7 @@ import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CuisineRegisterService(
@@ -21,13 +22,16 @@ class CuisineRegisterService(
         }
     }
 
+    @Transactional
     fun save(cuisine: Cuisine): Cuisine {
         return cuisineRepository.save(cuisine)
     }
 
+    @Transactional
     fun remove(cuisineId: Long) {
         try {
             cuisineRepository.deleteById(cuisineId)
+            cuisineRepository.flush()
         } catch (e: EmptyResultDataAccessException) {
             throw CuisineNotFoundException(cuisineId)
         } catch (e: DataIntegrityViolationException) {
