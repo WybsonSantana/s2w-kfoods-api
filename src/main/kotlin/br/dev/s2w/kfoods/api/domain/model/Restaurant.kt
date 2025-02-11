@@ -27,6 +27,8 @@ data class Restaurant(
     @Column(name = "delivery_fee", nullable = false)
     val deliveryFee: BigDecimal? = null,
 
+    //@JsonIgnoreProperties(value = ["name"], allowGetters = true)
+    // The annotation @JsonIgnoreProperties has no cascade effect on Kotlin
     @field:Valid
     @field:NotNull(groups = [RestaurantRegistration::class])
     @ManyToOne
