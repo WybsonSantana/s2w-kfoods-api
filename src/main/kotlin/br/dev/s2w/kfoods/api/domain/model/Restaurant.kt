@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import javax.persistence.*
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
@@ -37,11 +38,11 @@ data class Restaurant(
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    val registrationDate: LocalDateTime? = null,
+    val registrationDate: OffsetDateTime? = null,
 
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    val lastUpdateDate: LocalDateTime? = null,
+    val lastUpdateDate: OffsetDateTime? = null,
 
     @ManyToMany
     @JoinTable(
