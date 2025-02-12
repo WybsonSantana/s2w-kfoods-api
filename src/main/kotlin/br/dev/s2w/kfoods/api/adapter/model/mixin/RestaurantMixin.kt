@@ -15,7 +15,7 @@ abstract class RestaurantMixin(
     @JsonIgnore
     val address: Address? = null,
 
-    @JsonIgnore
+    //@JsonIgnore
     val registrationDate: LocalDateTime? = null,
 
     @JsonIgnore
