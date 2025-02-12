@@ -7,7 +7,7 @@ import br.dev.s2w.kfoods.api.domain.model.Product
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDateTime
 
-class RestaurantMixin(
+abstract class RestaurantMixin(
     //@JsonIgnoreProperties(value = ["name"], allowGetters = true)
     // The annotation @JsonIgnoreProperties has no cascade effect on Kotlin
     val cuisine: Cuisine? = null,
