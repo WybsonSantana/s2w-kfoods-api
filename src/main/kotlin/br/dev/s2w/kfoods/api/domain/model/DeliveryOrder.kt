@@ -2,7 +2,7 @@ package br.dev.s2w.kfoods.api.domain.model
 
 import org.hibernate.annotations.CreationTimestamp
 import java.math.BigDecimal
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import javax.persistence.*
 
 @Entity
@@ -23,13 +23,13 @@ data class DeliveryOrder(
     val status: OrderStatus? = null,
 
     @CreationTimestamp
-    val registrationDate: LocalDateTime? = null,
+    val registrationDate: OffsetDateTime? = null,
 
-    val confirmationDate: LocalDateTime? = null,
+    val confirmationDate: OffsetDateTime? = null,
 
-    val cancellationDate: LocalDateTime? = null,
+    val cancellationDate: OffsetDateTime? = null,
 
-    val deliveryDate: LocalDateTime? = null,
+    val deliveryDate: OffsetDateTime? = null,
 
     @ManyToOne
     @JoinColumn(nullable = false)

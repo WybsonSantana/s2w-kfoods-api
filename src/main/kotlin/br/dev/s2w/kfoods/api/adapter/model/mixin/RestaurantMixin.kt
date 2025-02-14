@@ -5,7 +5,7 @@ import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.model.PaymentMethod
 import br.dev.s2w.kfoods.api.domain.model.Product
 import com.fasterxml.jackson.annotation.JsonIgnore
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 abstract class RestaurantMixin(
     //@JsonIgnoreProperties(value = ["name"], allowGetters = true)
@@ -15,11 +15,11 @@ abstract class RestaurantMixin(
     @JsonIgnore
     val address: Address? = null,
 
-    //@JsonIgnore
-    val registrationDate: LocalDateTime? = null,
+    @JsonIgnore
+    val registrationDate: OffsetDateTime? = null,
 
     @JsonIgnore
-    val lastUpdateDate: LocalDateTime? = null,
+    val lastUpdateDate: OffsetDateTime? = null,
 
     @JsonIgnore
     val paymentMethods: MutableList<PaymentMethod> = mutableListOf(),

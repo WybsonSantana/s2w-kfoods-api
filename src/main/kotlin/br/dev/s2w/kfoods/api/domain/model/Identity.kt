@@ -1,7 +1,7 @@
 package br.dev.s2w.kfoods.api.domain.model
 
 import org.hibernate.annotations.CreationTimestamp
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import javax.persistence.*
 
 @Entity
@@ -21,7 +21,7 @@ data class Identity(
 
     @CreationTimestamp
     @Column(nullable = false)
-    val registrationDate: LocalDateTime? = null,
+    val registrationDate: OffsetDateTime? = null,
 
     @ManyToMany
     @JoinTable(
