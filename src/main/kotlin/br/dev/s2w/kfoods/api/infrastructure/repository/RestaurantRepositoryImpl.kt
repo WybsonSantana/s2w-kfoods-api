@@ -48,4 +48,5 @@ class RestaurantRepositoryImpl(
     override fun findWithFreeDelivery(name: String): List<Restaurant> {
         return restaurantRepository.findAll(withFreeDelivery().and(withSimilarName(name)))
     }
+
 }

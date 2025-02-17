@@ -3,7 +3,6 @@ package br.dev.s2w.kfoods.api.adapter.controller
 import br.dev.s2w.kfoods.api.domain.model.Cuisine
 import br.dev.s2w.kfoods.api.domain.repository.CuisineRepository
 import br.dev.s2w.kfoods.api.domain.service.CuisineRegisterService
-import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -30,9 +29,12 @@ class CuisineController(
 
     @PutMapping("/{cuisineId}")
     fun update(@PathVariable cuisineId: Long, @RequestBody @Valid cuisine: Cuisine): Cuisine =
-        cuisineRegister.find(cuisineId).also {
-            BeanUtils.copyProperties(cuisine, it, "id")
-            cuisineRegister.save(it)
+        cuisineRegister.find(cuisineId).also { currentCuisine ->
+            currentCuisine.copy(
+                name = cuisine.name
+            ).let { updatedCuisine ->
+                cuisineRegister.save(updatedCuisine)
+            }
         }
 
     @DeleteMapping("/{cuisineId}")

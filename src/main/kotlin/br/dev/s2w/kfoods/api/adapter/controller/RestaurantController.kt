@@ -1,32 +1,20 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
 import br.dev.s2w.kfoods.api.core.validation.Groups
-import br.dev.s2w.kfoods.api.core.validation.ValidationException
 import br.dev.s2w.kfoods.api.domain.exception.BusinessException
 import br.dev.s2w.kfoods.api.domain.exception.CuisineNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.Restaurant
 import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepository
 import br.dev.s2w.kfoods.api.domain.service.RestaurantRegisterService
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.apache.commons.lang3.exception.ExceptionUtils
-import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
-import org.springframework.http.converter.HttpMessageNotReadableException
-import org.springframework.http.server.ServletServerHttpRequest
-import org.springframework.util.ReflectionUtils
-import org.springframework.validation.BeanPropertyBindingResult
-import org.springframework.validation.SmartValidator
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping("/restaurants")
 class RestaurantController(
     private val restaurantRepository: RestaurantRepository,
-    private val restaurantRegister: RestaurantRegisterService,
-    private val validator: SmartValidator
+    private val restaurantRegister: RestaurantRegisterService
 ) {
 
     @GetMapping
@@ -52,59 +40,17 @@ class RestaurantController(
         @RequestBody @Validated(Groups.RestaurantRegistration::class) restaurant: Restaurant
     ): Restaurant =
         try {
-            restaurantRegister.find(restaurantId).also {
-                BeanUtils.copyProperties(
-                    restaurant, it,
-                    "id", "paymentMethods", "address", "registrationDate", "products"
-                )
-
-                restaurantRegister.save(it)
+            restaurantRegister.find(restaurantId).also { currentRestaurant ->
+                currentRestaurant.copy(
+                    name = restaurant.name,
+                    deliveryFee = restaurant.deliveryFee,
+                    cuisine = restaurant.cuisine
+                ).let { updatedRestaurant ->
+                    restaurantRegister.save(updatedRestaurant)
+                }
             }
         } catch (e: CuisineNotFoundException) {
             throw BusinessException(e.message, e)
         }
-
-    @PatchMapping("/{restaurantId}")
-    fun patch(
-        @PathVariable restaurantId: Long,
-        @RequestBody fields: Map<String, Any>,
-        request: HttpServletRequest
-    ): Restaurant =
-        restaurantRegister.find(restaurantId).also {
-            merge(fields, it, request)
-            validate(it, "restaurant")
-            update(restaurantId, it)
-        }
-
-    private fun merge(fields: Map<String, Any>, targetRestaurant: Restaurant, request: HttpServletRequest) {
-        val serverHttpRequest = ServletServerHttpRequest(request)
-
-        try {
-            val mapper = ObjectMapper()
-            mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true)
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
-
-            val currentRestaurant = mapper.convertValue(fields, Restaurant::class.java)
-
-            fields.forEach { (key, value) ->
-                val field = ReflectionUtils.findField(Restaurant::class.java, key)
-                field?.isAccessible = true
-
-                ReflectionUtils.getField(field!!, currentRestaurant).also {
-                    ReflectionUtils.setField(field, targetRestaurant, it)
-                }
-            }
-        } catch (e: IllegalArgumentException) {
-            val rootCause = ExceptionUtils.getRootCause(e)
-            throw HttpMessageNotReadableException(e.message.toString(), rootCause, serverHttpRequest)
-        }
-    }
-
-    private fun validate(restaurant: Restaurant, objectName: String): Unit {
-        BeanPropertyBindingResult(restaurant, objectName).also {
-            validator.validate(restaurant, it)
-            it.takeIf { it.hasErrors() }?.let { throw ValidationException(it) }
-        }
-    }
 
 }

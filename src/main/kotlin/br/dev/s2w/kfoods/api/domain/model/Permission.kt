@@ -10,11 +10,11 @@ import javax.persistence.Id
 data class Permission(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    val id: Long? = null,
 
     @Column(nullable = false)
-    var name: String? = null,
+    val name: String? = null,
 
     @Column(nullable = false)
-    var description: String? = null
+    val description: String? = null
 )

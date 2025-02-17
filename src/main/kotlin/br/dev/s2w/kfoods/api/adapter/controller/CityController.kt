@@ -6,7 +6,6 @@ import br.dev.s2w.kfoods.api.domain.exception.StateNotFoundException
 import br.dev.s2w.kfoods.api.domain.model.City
 import br.dev.s2w.kfoods.api.domain.repository.CityRepository
 import br.dev.s2w.kfoods.api.domain.service.CityRegisterService
-import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -41,10 +40,13 @@ class CityController(
         @RequestBody @Validated(Groups.CityRegistration::class) city: City
     ) =
         try {
-            cityRegister.find(cityId).also {
-                BeanUtils.copyProperties(city, it, "id")
-
-                cityRegister.save(it)
+            cityRegister.find(cityId).also { currentCity ->
+                currentCity.copy(
+                    name = city.name,
+                    state = city.state
+                ).let { updatedCity ->
+                    cityRegister.save(updatedCity)
+                }
             }
         } catch (e: StateNotFoundException) {
             throw BusinessException(e.message, e)

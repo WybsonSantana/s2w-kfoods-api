@@ -10,7 +10,9 @@ class FreeDeliveryFeeIncludesDescriptionValidator
     : ConstraintValidator<FreeDeliveryFeeIncludesDescription, Any> {
 
     private lateinit var fieldValue: String
+
     private lateinit var fieldDescription: String
+
     private lateinit var requiredDescription: String
 
     override fun initialize(constraintAnnotation: FreeDeliveryFeeIncludesDescription?) {

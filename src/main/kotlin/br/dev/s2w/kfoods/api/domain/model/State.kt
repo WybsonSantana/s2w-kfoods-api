@@ -10,9 +10,9 @@ data class State(
     @field:NotNull(groups = [Groups.CityRegistration::class])
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    val id: Long? = null,
 
     @field:NotBlank
     @Column(nullable = false)
-    var name: String? = null
+    val name: String? = null
 )

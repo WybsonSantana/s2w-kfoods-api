@@ -3,7 +3,6 @@ package br.dev.s2w.kfoods.api.adapter.controller
 import br.dev.s2w.kfoods.api.domain.model.State
 import br.dev.s2w.kfoods.api.domain.repository.StateRepository
 import br.dev.s2w.kfoods.api.domain.service.StateRegisterService
-import org.springframework.beans.BeanUtils
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -30,9 +29,12 @@ class StateController(
 
     @PutMapping("/{stateId}")
     fun update(@PathVariable stateId: Long, @RequestBody @Valid state: State): State =
-        stateRegister.find(stateId).also {
-            BeanUtils.copyProperties(state, it, "id")
-            stateRegister.save(it)
+        stateRegister.find(stateId).also { currentState ->
+            currentState.copy(
+                name = state.name
+            ).let { updatedState ->
+                stateRegister.save(updatedState)
+            }
         }
 
     @DeleteMapping("/{stateId}")
