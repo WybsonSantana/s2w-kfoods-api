@@ -1,10 +1,10 @@
 package br.dev.s2w.kfoods.api.adapter.controller
 
+import br.dev.s2w.kfoods.api.adapter.assembler.toCollectionModel
+import br.dev.s2w.kfoods.api.adapter.assembler.toModel
 import br.dev.s2w.kfoods.api.adapter.model.RestaurantModel
 import br.dev.s2w.kfoods.api.adapter.model.input.RestaurantInput
 import br.dev.s2w.kfoods.api.adapter.model.input.toDomainObject
-import br.dev.s2w.kfoods.api.adapter.model.toCollectionModel
-import br.dev.s2w.kfoods.api.adapter.model.toModel
 import br.dev.s2w.kfoods.api.domain.exception.BusinessException
 import br.dev.s2w.kfoods.api.domain.exception.CuisineNotFoundException
 import br.dev.s2w.kfoods.api.domain.repository.RestaurantRepository
