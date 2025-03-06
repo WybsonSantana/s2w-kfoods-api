@@ -20,11 +20,3 @@ data class RestaurantInput(
     @NotNull
     val cuisine: CuisineIdInput? = null
 )
-
-fun RestaurantInput.toDomainObject(): Restaurant = Restaurant(
-    name = this.name,
-    deliveryFee = this.deliveryFee,
-    cuisine = Cuisine(
-        id = this.cuisine?.id
-    )
-)
